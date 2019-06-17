@@ -1,0 +1,22 @@
+{
+  "name": "yusronarif/laravel-core",
+  "description": "Laravel Custom Core",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Much Yusron Arif",
+      "email": "yusron.arif4@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Yusronarif\\Laravel\\": "src/"
+    }
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}

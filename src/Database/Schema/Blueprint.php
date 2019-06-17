@@ -1,6 +1,6 @@
 <?php
 
-namespace ArKID\Perbanas\Core\Database\Schema;
+namespace Yusronarif\Laravel\Database\Schema;
 
 use DB;
 use Closure;

@@ -1,6 +1,6 @@
 <?php
 
-namespace ArKID\Perbanas\Core\Database\Eloquent\Concerns;
+namespace Yusronarif\Laravel\Database\Eloquent\Concerns;
 
 use Illuminate\Database\Eloquent\Concerns\HasTimestamps as BaseHasTimestamps;
 

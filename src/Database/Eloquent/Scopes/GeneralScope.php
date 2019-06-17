@@ -1,6 +1,6 @@
 <?php
 
-namespace ArKID\Perbanas\Core\Database\Eloquent\Scopes;
+namespace Yusronarif\Laravel\Database\Eloquent\Scopes;
 
 use Illuminate\Database\Eloquent\Builder;
 

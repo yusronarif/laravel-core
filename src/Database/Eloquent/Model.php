@@ -1,9 +1,9 @@
 <?php
 
-namespace ArKID\Perbanas\Core\Database\Eloquent;
+namespace Yusronarif\Laravel\Database\Eloquent;
 
-use ArKID\Perbanas\Core\Database\Eloquent\Concerns\HasTimestamps;
-use ArKID\Perbanas\Core\Database\Eloquent\Scopes\GeneralScope;
+use Yusronarif\Laravel\Database\Eloquent\Concerns\HasTimestamps;
+use Yusronarif\Laravel\Database\Eloquent\Scopes\GeneralScope;
 use Illuminate\Database\Eloquent\Model as BaseModel;
 
 class Model extends BaseModel

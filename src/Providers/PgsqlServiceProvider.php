@@ -1,8 +1,8 @@
 <?php
 
-namespace ArKID\Perbanas\Core\Providers;
+namespace Yusronarif\Laravel\Providers;
 
-use ArKID\Perbanas\Core\Database\PgSqlConnection;
+use Yusronarif\Laravel\Database\PgSqlConnection;
 use Illuminate\Database\Connection;
 use Illuminate\Support\ServiceProvider;
 

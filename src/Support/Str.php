@@ -1,6 +1,6 @@
 <?php
 
-namespace ArKID\Perbanas\Core\Support;
+namespace Yusronarif\Laravel\Support;
 
 use Illuminate\Support\Str as BaseStr;
 
