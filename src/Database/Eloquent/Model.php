@@ -5,10 +5,16 @@ namespace Yusronarif\Laravel\Database\Eloquent;
 use Yusronarif\Laravel\Database\Eloquent\Concerns\HasTimestamps;
 use Yusronarif\Laravel\Database\Eloquent\Scopes\GeneralScope;
 use Illuminate\Database\Eloquent\Model as BaseModel;
+use Illuminate\Support\Facades\DB;
 
 class Model extends BaseModel
 {
     use HasTimestamps, GeneralScope;
+
+    /*
+     * The list of table wich include with schema
+     */
+    protected $fullnameTable = [];
 
     /**
      * The name of the "created at" column.
@@ -33,5 +39,8 @@ class Model extends BaseModel
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
+        $schema = DB::getDatabaseName();
+
+        $this->fullnameTable['self'] = "{$schema}.{$this->table}";
     }
 }
