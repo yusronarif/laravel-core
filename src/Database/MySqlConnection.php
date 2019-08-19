@@ -2,9 +2,9 @@
 
 namespace Yusronarif\Laravel\Database;
 
-use Yusronarif\Laravel\Database\Schema\Blueprint;
 use Illuminate\Database\MySqlConnection as ParentConnection;
 //use Illuminate\Database\Schema\MySqlBuilder as ParentBuilder;
+use Yusronarif\Laravel\Database\Schema\Blueprint;
 
 class MySqlConnection extends ParentConnection
 {

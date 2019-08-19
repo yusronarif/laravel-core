@@ -2,9 +2,9 @@
 
 namespace Yusronarif\Laravel\Providers;
 
-use Yusronarif\Laravel\Database\MySqlConnection;
 use Illuminate\Database\Connection;
 use Illuminate\Support\ServiceProvider;
+use Yusronarif\Laravel\Database\MySqlConnection;
 
 class MysqlServiceProvider extends ServiceProvider
 {

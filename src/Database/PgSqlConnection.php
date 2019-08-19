@@ -2,9 +2,9 @@
 
 namespace Yusronarif\Laravel\Database;
 
-use Yusronarif\Laravel\Database\Schema\Blueprint;
 use Illuminate\Database\PostgresConnection as ParentConnection;
 //use Illuminate\Database\Schema\PostgresBuilder as ParentBuilder;
+use Yusronarif\Laravel\Database\Schema\Blueprint;
 
 class PgSqlConnection extends ParentConnection
 {
