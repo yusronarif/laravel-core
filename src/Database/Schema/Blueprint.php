@@ -67,7 +67,10 @@ class Blueprint extends BaseBlueprint
                     $type = $attr['type'] ?: 'string';
                     $type = preg_replace('/:+/i', ',', $type);
 
-                    $t = $this->{$type}($field)->nullable($attr['null'] ?: false);
+                    $t = $this->{$type}($field);
+                    if (isset($attr['null'])) {
+                        $t->nullable((boolean) $attr['null']);
+                    }
                     if (isset($attr['default'])) {
                         $t->default($attr['default']);
                     }
@@ -104,7 +107,8 @@ class Blueprint extends BaseBlueprint
                     $pkey = "{$prefix}_{$key}_foreign";
                     if (!in_array($pkey, $fkeys)) {
                         $this->foreign($key)->references($vals['reference'])->on($tbl)
-                            ->onUpdate($vals['onUpdate'] ?: 'cascade')->onDelete($vals['onDelete'] ?: 'cascade');
+                            ->onUpdate(isset($vals['onUpdate']) ? $vals['onUpdate'] : 'cascade')
+                            ->onDelete(isset($vals['onDelete']) ? $vals['onDelete'] : 'cascade');
                     }
                 }
             }
