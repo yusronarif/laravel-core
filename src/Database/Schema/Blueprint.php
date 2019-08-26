@@ -55,19 +55,28 @@ class Blueprint extends BaseBlueprint
 
 
     /**
-     * @param Blueprint $table
      * @param $fields
-     * @return bool|Blueprint
+     * @param null $connection
+     * @return \Illuminate\Database\Schema\ColumnDefinition
      */
     public function setFields($fields, $connection = null)
     {
         if (is_array($fields) && count($fields) > 0) {
             foreach ($fields as $field => $attr) {
                 if (!Schema::connection($connection)->hasColumn($this->getTable(), $field)) {
-                    $type = $attr['type'] ?: 'string';
-                    $type = preg_replace('/:+/i', ',', $type);
+                    $type = preg_replace('/\s+/i', '', $attr['type']) ?: 'string';
 
-                    $t = $this->{$type}($field);
+                    if(strpos($type, ':', 1)) {
+                        $epl = explode(':', $type);
+                        $type = $epl[0];
+                        $length = $epl[1];
+
+                        $t = $this->{$type}($field, ...explode(',', $length));
+                    }
+                    else {
+                        $t = $this->{$type}($field);
+                    }
+
                     if (isset($attr['null'])) {
                         $t->nullable((boolean) $attr['null']);
                     }
@@ -83,9 +92,9 @@ class Blueprint extends BaseBlueprint
     }
 
     /**
-     * @param Blueprint $table
-     * @param array $foreigns
-     * @return bool|Blueprint
+     * @param $foreigns
+     * @param null $connection
+     * @return \Illuminate\Database\Schema\ColumnDefinition
      */
     public function setForeigns($foreigns, $connection = null)
     {
