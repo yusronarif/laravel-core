@@ -104,8 +104,7 @@ class Blueprint extends BaseBlueprint
                         $vals['reference'] = $ref;
                     } else $vals = $ref;
 
-                    $pkey = "{$prefix}_{$key}_foreign";
-                    if (!in_array($pkey, $fkeys)) {
+                    if (! in_array("{$key}_foreign", $fkeys) && ! in_array("{$prefix}_{$key}_foreign", $fkeys)) {
                         $this->foreign($key)->references($vals['reference'])->on($tbl)
                             ->onUpdate(isset($vals['onUpdate']) ? $vals['onUpdate'] : 'cascade')
                             ->onDelete(isset($vals['onDelete']) ? $vals['onDelete'] : 'cascade');
