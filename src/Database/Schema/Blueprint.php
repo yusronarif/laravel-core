@@ -90,9 +90,10 @@ class Blueprint extends BaseBlueprint
     public function setForeigns($foreigns, $connection = null)
     {
         if (is_array($foreigns) && count($foreigns) > 0) {
-            $currentTable = config('database.current_schema') . '.' . $this->getTable();
+            $currentTable = $this->getTable();
+            $fullTable = config('database.current_schema') . '.' . $this->getTable();
+            $fullTable = Str::forceSnake($fullTable);
 
-            $prefix = Str::forceSnake($currentTable);
             $sm = Schema::connection($connection)->getConnection()->getDoctrineSchemaManager();
             $fkeys = array_map(function ($a) {
                 return $a->getName();
@@ -104,7 +105,7 @@ class Blueprint extends BaseBlueprint
                         $vals['reference'] = $ref;
                     } else $vals = $ref;
 
-                    if (! in_array("{$key}_foreign", $fkeys) && ! in_array("{$prefix}_{$key}_foreign", $fkeys)) {
+                    if (! in_array("{$currentTable}_{$key}_foreign", $fkeys) && ! in_array("{$fullTable}_{$key}_foreign", $fkeys)) {
                         $this->foreign($key)->references($vals['reference'])->on($tbl)
                             ->onUpdate(isset($vals['onUpdate']) ? $vals['onUpdate'] : 'cascade')
                             ->onDelete(isset($vals['onDelete']) ? $vals['onDelete'] : 'cascade');
