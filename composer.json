@@ -13,6 +13,9 @@
     "php": ">=7.0",
     "laravel/framework": ">=5.5"
   },
+  "require-dev": {
+    "phpunit/phpunit": ">=6.0"
+  },
   "autoload": {
     "psr-4": {
       "Yusronarif\\Laravel\\": "src/"
