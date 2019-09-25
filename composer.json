@@ -1,5 +1,5 @@
 {
-  "name": "yusronarif/laravel",
+  "name": "yusronarif/laravel-core",
   "description": "Laravel Custom Core",
   "type": "library",
   "license": "MIT",
@@ -19,7 +19,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Yusronarif\\Laravel\\": "src/"
+      "Yusronarif\\Core\\": "src/"
     },
     "files": [
       "helpers/helpers.php",
@@ -31,8 +31,8 @@
   "extra": {
     "laravel": {
       "providers": [
-        "Yusronarif\\Laravel\\Providers\\DbServiceProvider",
-        "Yusronarif\\Laravel\\Providers\\BladeServiceProvider"
+        "Yusronarif\\Core\\Providers\\DbServiceProvider",
+        "Yusronarif\\Core\\Providers\\BladeServiceProvider"
       ],
       "aliases": {}
     }

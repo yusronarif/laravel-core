@@ -1,12 +1,12 @@
 <?php
 
-namespace Yusronarif\Laravel\Database\Eloquent;
+namespace Yusronarif\Core\Database\Eloquent;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model as BaseModel;
 use Illuminate\Support\Facades\DB;
-use Yusronarif\Laravel\Database\Eloquent\Concerns\HasTimestamps;
-use Yusronarif\Laravel\Database\Eloquent\Scopes\GeneralScope;
+use Yusronarif\Core\Database\Eloquent\Concerns\HasTimestamps;
+use Yusronarif\Core\Database\Eloquent\Scopes\GeneralScope;
 
 class Model extends BaseModel
 {

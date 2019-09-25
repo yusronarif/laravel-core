@@ -1,11 +1,11 @@
 <?php
 
-namespace Yusronarif\Laravel\Database\Migrations;
+namespace Yusronarif\Core\Database\Migrations;
 
 use Illuminate\Database\Migrations\Migration as BaseMigration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use Yusronarif\Laravel\Support\Str;
+use Yusronarif\Core\Support\Str;
 
 class Migration extends BaseMigration
 {

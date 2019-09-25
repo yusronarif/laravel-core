@@ -1,6 +1,6 @@
 <?php
 
-namespace Yusronarif\Laravel\Database\Eloquent;
+namespace Yusronarif\Core\Database\Eloquent;
 
 use Illuminate\Database\Eloquent\SoftDeletes as BaseSoftDeletes;
 

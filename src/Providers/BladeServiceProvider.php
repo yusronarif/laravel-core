@@ -1,6 +1,6 @@
 <?php
 
-namespace Yusronarif\Laravel\Providers;
+namespace Yusronarif\Core\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;

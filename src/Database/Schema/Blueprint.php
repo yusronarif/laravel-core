@@ -1,12 +1,12 @@
 <?php
 
-namespace Yusronarif\Laravel\Database\Schema;
+namespace Yusronarif\Core\Database\Schema;
 
 use DB;
 use Closure;
 use Illuminate\Database\Schema\Blueprint as BaseBlueprint;
 use Illuminate\Support\Facades\Schema;
-use Yusronarif\Laravel\Support\Str;
+use Yusronarif\Core\Support\Str;
 
 class Blueprint extends BaseBlueprint
 {

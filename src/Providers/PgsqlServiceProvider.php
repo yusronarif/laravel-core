@@ -1,10 +1,10 @@
 <?php
 
-namespace Yusronarif\Laravel\Providers;
+namespace Yusronarif\Core\Providers;
 
 use Illuminate\Database\Connection;
 use Illuminate\Support\ServiceProvider;
-use Yusronarif\Laravel\Database\PgSqlConnection;
+use Yusronarif\Core\Database\PgSqlConnection;
 
 class PgsqlServiceProvider extends ServiceProvider
 {

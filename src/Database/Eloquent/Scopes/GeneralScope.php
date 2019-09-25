@@ -1,6 +1,6 @@
 <?php
 
-namespace Yusronarif\Laravel\Database\Eloquent\Scopes;
+namespace Yusronarif\Core\Database\Eloquent\Scopes;
 
 use Illuminate\Database\Eloquent\Builder;
 

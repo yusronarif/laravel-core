@@ -1,10 +1,10 @@
 <?php
 
-namespace Yusronarif\Laravel\Database;
+namespace Yusronarif\Core\Database;
 
 use Illuminate\Database\MySqlConnection as ParentConnection;
 //use Illuminate\Database\Schema\MySqlBuilder as ParentBuilder;
-use Yusronarif\Laravel\Database\Schema\Blueprint;
+use Yusronarif\Core\Database\Schema\Blueprint;
 
 class MySqlConnection extends ParentConnection
 {

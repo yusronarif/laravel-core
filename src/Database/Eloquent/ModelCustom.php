@@ -1,6 +1,6 @@
 <?php
 
-namespace Yusronarif\Laravel\Database\Eloquent;
+namespace Yusronarif\Core\Database\Eloquent;
 
 trait ModelCustom
 {
