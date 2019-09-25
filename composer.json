@@ -11,16 +11,30 @@
   ],
   "require": {
     "php": ">=7.0",
-    "laravel/framework": ">=5.5"
+    "nesbot/carbon": ">=2.0"
   },
   "require-dev": {
+    "laravel/framework": ">=5.5",
     "phpunit/phpunit": ">=6.0"
   },
   "autoload": {
     "psr-4": {
       "Yusronarif\\Laravel\\": "src/"
-    }
+    },
+    "files": [
+      "helpers/helpers.php",
+      "helpers/html_elements.php"
+    ]
   },
   "minimum-stability": "dev",
-  "prefer-stable": true
+  "prefer-stable": true,
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Yusronarif\\Laravel\\Providers\\DbServiceProvider",
+        "Yusronarif\\Laravel\\Providers\\BladeServiceProvider"
+      ],
+      "aliases": {}
+    }
+  }
 }
