@@ -10,7 +10,7 @@ class PgSqlConnection extends ParentConnection
 {
     public function getSchemaBuilder()
     {
-        if(is_null($this->schemaGrammar)) {
+        if (is_null($this->schemaGrammar)) {
             $this->useDefaultSchemaGrammar();
         }
 
@@ -21,5 +21,4 @@ class PgSqlConnection extends ParentConnection
 
         return $builder;
     }
-
 }

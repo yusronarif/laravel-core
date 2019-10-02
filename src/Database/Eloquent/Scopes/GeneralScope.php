@@ -8,8 +8,9 @@ trait GeneralScope
 {
     /**
      * @param Builder $query
-     * @param string $field
+     * @param string  $field
      * @param $value
+     *
      * @return mixed
      */
     public function scopeByMd5(Builder $query, string $field, $value)
@@ -19,8 +20,9 @@ trait GeneralScope
 
     /**
      * @param Builder $query
-     * @param string $field
+     * @param string  $field
      * @param $value
+     *
      * @return Builder
      */
     public function scopeByMd5Not(Builder $query, string $field, $value)

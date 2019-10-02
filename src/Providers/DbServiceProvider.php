@@ -9,7 +9,6 @@ use Yusronarif\Core\Database\PgSqlConnection;
 
 class DbServiceProvider extends ServiceProvider
 {
-
     public function register()
     {
         Connection::resolverFor('mysql', function ($connection, $database, $prefix, $config) {
@@ -19,5 +18,4 @@ class DbServiceProvider extends ServiceProvider
             return new PgSqlConnection($connection, $database, $prefix, $config);
         });
     }
-
 }

@@ -14,6 +14,7 @@ class Migration extends BaseMigration
     /**
      * @param Blueprint $table
      * @param $fields
+     *
      * @return bool|Blueprint
      */
     protected function setFields(Blueprint $table, $fields)
@@ -36,18 +37,20 @@ class Migration extends BaseMigration
 
             return $table;
         }
+
         return false;
     }
 
     /**
      * @param Blueprint $table
-     * @param array $foreigns
+     * @param array     $foreigns
+     *
      * @return bool|Blueprint
      */
     protected function setForeigns(Blueprint $table, $foreigns = [])
     {
         if (is_array($foreigns) && count($foreigns) > 0) {
-            $currentTable = config('database.current_schema') . '.' . $this->table;
+            $currentTable = config('database.current_schema').'.'.$this->table;
 
             $prefix = Str::forceSnake($currentTable);
             $sm = Schema::connection($this->connection)->getConnection()->getDoctrineSchemaManager();
@@ -59,7 +62,9 @@ class Migration extends BaseMigration
                 foreach ($tblAttr as $key => $ref) {
                     if (!is_array($ref)) {
                         $vals['reference'] = $ref;
-                    } else $vals = $ref;
+                    } else {
+                        $vals = $ref;
+                    }
 
                     $pkey = "{$prefix}_{$key}_foreign";
                     if (!in_array($pkey, $fkeys)) {
@@ -71,6 +76,7 @@ class Migration extends BaseMigration
 
             return $table;
         }
+
         return false;
     }
 }
