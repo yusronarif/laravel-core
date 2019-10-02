@@ -2,8 +2,8 @@
 
 namespace Yusronarif\Core\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\ServiceProvider;
 
 class BladeServiceProvider extends ServiceProvider
 {
@@ -24,7 +24,7 @@ class BladeServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Blade::directive('plugins', function($arguments){
+        Blade::directive('plugins', function ($arguments) {
             /* dd([$arguments, preg_replace('/^(")|(")$/s', '', $arguments), (array)$arguments]);
             return false;
             $args = $this->getArguments($arguments);
@@ -42,7 +42,7 @@ class BladeServiceProvider extends ServiceProvider
      *
      * @return array
      */
-    private function getArguments($argumentString, $limit = PHP_INT_MAX )
+    private function getArguments($argumentString, $limit = PHP_INT_MAX)
     {
         return explode(', ', str_replace(['(', ')'], '', $argumentString), $limit);
     }

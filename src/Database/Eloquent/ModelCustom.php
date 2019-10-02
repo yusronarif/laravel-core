@@ -11,7 +11,7 @@ trait ModelCustom
     protected $primaryValue = 'int';
 
     /**
-     * if incrementing method is manually
+     * if incrementing method is manually.
      *
      * @var bool
      */
@@ -22,22 +22,20 @@ trait ModelCustom
         if ($this->primaryValue === 'int') {
             if ($this->autoIncrementing == true) {
                 return $this->select(DB::Raw("nextval('{$this->table}_{$this->primaryKey}_seq'::regclass)"))->first()->nextval;
-            }
-            else {
+            } else {
                 return $this->max($this->primaryKey) + 1;
             }
         }
 
         if ($this->primaryValue === 'string') {
-            return md5(auth()->user()->id . '::' . config('perbanas.app.codename') . '::' . microtime());
+            return md5(auth()->user()->id.'::'.config('perbanas.app.codename').'::'.microtime());
         }
     }
 
     protected function setPrimaryValue()
     {
-        if (! $this->exists) {
+        if (!$this->exists) {
             $this->attributes[$this->primaryKey] = $this->getPrimaryValue();
         }
     }
-
 }

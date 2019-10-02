@@ -2,13 +2,13 @@
 
 namespace Yusronarif\Core\Test;
 
-use Illuminate\Support\Facades\Cache;
-use Yusronarif\RBAC\Contracts\Role;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
-use Yusronarif\RBAC\PermissionRegistrar;
-use Yusronarif\RBAC\Contracts\Permission;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Schema;
 use Orchestra\Testbench\TestCase as Orchestra;
+use Yusronarif\RBAC\Contracts\Permission;
+use Yusronarif\RBAC\Contracts\Role;
+use Yusronarif\RBAC\PermissionRegistrar;
 use Yusronarif\RBAC\PermissionServiceProvider;
 
 abstract class TestCase extends Orchestra
@@ -73,7 +73,7 @@ abstract class TestCase extends Orchestra
             'prefix'   => '',
         ]);
 
-        $app['config']->set('view.paths', [__DIR__ . '/resources/views']);
+        $app['config']->set('view.paths', [__DIR__.'/resources/views']);
 
         // Set-up admin guard
         $app['config']->set('auth.guards.admin', ['driver' => 'session', 'provider' => 'admins']);
@@ -110,7 +110,7 @@ abstract class TestCase extends Orchestra
             $this->createCacheTable();
         }
 
-        include_once __DIR__ . '/../database/migrations/create_permission_tables.php.stub';
+        include_once __DIR__.'/../database/migrations/create_permission_tables.php.stub';
 
         (new \CreatePermissionTables())->up();
 
