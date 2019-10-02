@@ -6,7 +6,9 @@
   "authors": [
     {
       "name": "Much Yusron Arif",
-      "email": "yusron.arif4@gmail.com"
+      "email": "yusron.arif4@gmail.com",
+      "homepage": "https://yusronarif.github.io",
+      "role": "Developer"
     }
   ],
   "require": {
