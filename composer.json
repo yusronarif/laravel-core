@@ -55,9 +55,6 @@
         "Yusronarif\\Core\\Providers\\BladeServiceProvider"
       ],
       "aliases": {}
-    },
-    "branch_alias": {
-      "dev-master": "2.0.x-dev"
     }
   }
 }
