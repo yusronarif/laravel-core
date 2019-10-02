@@ -1,6 +1,6 @@
 <?php
 
-namespace Yusronarif\RBAC\Test;
+namespace Yusronarif\Core\Test;
 
 use Illuminate\Support\Facades\Cache;
 use Yusronarif\RBAC\Contracts\Role;
@@ -73,7 +73,7 @@ abstract class TestCase extends Orchestra
             'prefix'   => '',
         ]);
 
-        $app['config']->set('view.paths', [__DIR__.'/resources/views']);
+        $app['config']->set('view.paths', [__DIR__ . '/resources/views']);
 
         // Set-up admin guard
         $app['config']->set('auth.guards.admin', ['driver' => 'session', 'provider' => 'admins']);
@@ -110,7 +110,7 @@ abstract class TestCase extends Orchestra
             $this->createCacheTable();
         }
 
-        include_once __DIR__.'/../database/migrations/create_permission_tables.php.stub';
+        include_once __DIR__ . '/../database/migrations/create_permission_tables.php.stub';
 
         (new \CreatePermissionTables())->up();
 

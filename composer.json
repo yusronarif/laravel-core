@@ -1,6 +1,6 @@
 {
   "name": "yusronarif/laravel-core",
-  "description": "Laravel Custom Core<br>Laravel v5.8 & v6",
+  "description": "Laravel Custom Core",
   "type": "library",
   "license": "MIT",
   "authors": [
@@ -31,6 +31,19 @@
       "helpers/helpers.php",
       "helpers/html_elements.php"
     ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Yusronarif\\Core\\Test\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "phpunit"
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true
   },
   "minimum-stability": "dev",
   "prefer-stable": true,

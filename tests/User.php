@@ -1,6 +1,6 @@
 <?php
 
-namespace Yusronarif\RBAC\Test;
+namespace Yusronarif\Core\Test;
 
 use Illuminate\Auth\Authenticatable;
 use Yusronarif\RBAC\Traits\HasRoles;
