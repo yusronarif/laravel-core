@@ -25,7 +25,8 @@
   },
   "autoload": {
     "psr-4": {
-      "Yusronarif\\Core\\": "src/"
+      "Yusronarif\\Core\\": "src/",
+      "Yusronarif\\Core\\Test\\": "tests/"
     },
     "files": [
       "helpers/helpers.php",
