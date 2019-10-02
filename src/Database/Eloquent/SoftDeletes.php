@@ -27,13 +27,13 @@ trait SoftDeletes
 
         $columns = [
             $this->getDeletedAtColumn() => $this->fromDateTime($time),
-            $this->getDeletedByColumn() => $this->who
+            $this->getDeletedByColumn() => $this->who,
         ];
 
         $this->{$this->getDeletedAtColumn()} = $time;
         $this->{$this->getDeletedByColumn()} = $this->who;
 
-        if ($this->timestamps && ! is_null($this->getUpdatedAtColumn())) {
+        if ($this->timestamps && !is_null($this->getUpdatedAtColumn())) {
             $this->{$this->getUpdatedAtColumn()} = $time;
             $this->{$this->getUpdatedByColumn()} = $this->who;
 
@@ -96,7 +96,7 @@ trait SoftDeletes
      */
     public function getRestoreAtColumn()
     {
-        return defined('static::RESTORE_AT') ? static::RESTORE_AT: 'restore_at';
+        return defined('static::RESTORE_AT') ? static::RESTORE_AT : 'restore_at';
     }
 
     /**
