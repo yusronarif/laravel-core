@@ -5,6 +5,7 @@ namespace Yusronarif\Core\Database\Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model as BaseModel;
 use Illuminate\Support\Facades\DB;
+use Ramsey\Uuid\Uuid;
 use Yusronarif\Core\Database\Eloquent\Concerns\HasTimestamps;
 use Yusronarif\Core\Database\Eloquent\Scopes\GeneralScope;
 
@@ -47,6 +48,25 @@ class Model extends BaseModel
     }
 
     /**
+     * Insert the given attributes and set the ID on the model.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  array  $attributes
+     * @return void
+     */
+    protected function insertAndSetId(Builder $query, $attributes)
+    {
+        if (in_array(strtolower($this->keyType), ['string', 'uuid'])) {
+            $id = Uuid::uuid4()->getHex();
+
+            $this->setAttribute($this->getKeyName(), $id);
+        }
+        else {
+            parent::insertAndSetId($query, $attributes);
+        }
+    }
+
+        /**
      * Set the keys for a save update query.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
