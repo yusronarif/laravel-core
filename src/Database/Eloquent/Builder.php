@@ -7,14 +7,4 @@ use Yusronarif\Core\Database\Query\Builder as QueryBuilder;
 
 class Builder extends ParentBuilder
 {
-    /**
-     * Create a new Eloquent query builder instance.
-     *
-     * @param  \Yusronarif\Core\Database\Query\Builder  $query
-     * @return void
-     */
-    public function __construct(QueryBuilder $query)
-    {
-        parent::__construct($query);
-    }
 }

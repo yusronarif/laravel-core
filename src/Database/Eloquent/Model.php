@@ -49,7 +49,7 @@ class Model extends ParentModel
     /**
      * Perform a model insert operation.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  \Yusronarif\Core\Database\Eloquent\Builder  $query
      * @return bool
      */
     protected function performInsert(Builder $query)
