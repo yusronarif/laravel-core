@@ -69,7 +69,7 @@ class Model extends ParentModel
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    protected function setKeysForSaveQuery(Builder $query)
+    /*protected function setKeysForSaveQuery(Builder $query)
     {
         $keys = $this->getKeyName();
         if (!is_array($keys)) {
@@ -81,14 +81,14 @@ class Model extends ParentModel
         }
 
         return $query;
-    }
+    }*/
 
     /**
      * Get the primary key value for a save query.
      *
      * @return mixed
      */
-    protected function getKeyForSaveQuery($keyName = null)
+    /*protected function getKeyForSaveQuery($keyName = null)
     {
         if (is_null($keyName)) {
             $keyName = $this->getKeyName();
@@ -99,5 +99,5 @@ class Model extends ParentModel
         }
 
         return $this->getAttribute($keyName);
-    }
+    }*/
 }
