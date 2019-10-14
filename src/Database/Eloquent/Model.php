@@ -56,14 +56,16 @@ class Model extends BaseModel
      */
     protected function insertAndSetId(Builder $query, $attributes)
     {
+        $keyName = $this->getKeyName();
+
         if (in_array(strtolower($this->keyType), ['string', 'uuid'])) {
             $id = Uuid::uuid4()->getHex();
-
-            $this->setAttribute($this->getKeyName(), $id);
         }
         else {
-            parent::insertAndSetId($query, $attributes);
+            $id = $query->insertGetId($attributes, $keyName);
         }
+
+        $this->setAttribute($keyName, $id);
     }
 
         /**
