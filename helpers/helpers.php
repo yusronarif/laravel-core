@@ -1,5 +1,16 @@
 <?php
 
+if(! defined('SPACER')) define('SPACER', '&nbsp;&nbsp;&nbsp;&nbsp;');
+if(! defined('SPACER_TIGHT')) define('SPACER_TIGHT', '&nbsp;&nbsp;');
+if(! defined('SPACER_WIDE')) define('SPACER_WIDE', '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
+
+// date format
+if(! defined('DATE_SHORT')) define('DATE_SHORT', "L");
+if(! defined('DATE_MEDIUM')) define('DATE_MEDIUM', "ll");
+if(! defined('DATE_LONG')) define('DATE_LONG', "LL");
+if(! defined('DATE_FULL')) define('DATE_FULL', "LLL");
+if(! defined('DATE_FULL_SHORT')) define('DATE_FULL_SHORT', "lll");
+
 use Carbon\Carbon;
 
 if (!function_exists('f')) {
