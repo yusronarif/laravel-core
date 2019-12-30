@@ -12,6 +12,7 @@ if(! defined('DATE_FULL')) define('DATE_FULL', "LLL");
 if(! defined('DATE_FULL_SHORT')) define('DATE_FULL_SHORT', "lll");
 
 use Carbon\Carbon;
+use Yusronarif\Core\Support\Str;
 
 if (!function_exists('f')) {
     function f($string = '')
@@ -597,5 +598,17 @@ if (!function_exists('currency_format')) {
         }
 
         return $format;
+    }
+}
+
+
+if (!function_exists('get_raw_sql')) {
+    /**
+     * @param \Illuminate\Database\Query\Builder $query
+     * @return Generator
+     */
+    function get_raw_sql($query)
+    {
+        return Str::replaceArray('?', $query->getBindings(), $query->toSql());
     }
 }
