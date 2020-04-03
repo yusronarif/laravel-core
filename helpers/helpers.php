@@ -12,7 +12,6 @@ if(! defined('DATE_FULL')) define('DATE_FULL', "LLL");
 if(! defined('DATE_FULL_SHORT')) define('DATE_FULL_SHORT', "lll");
 
 use Carbon\Carbon;
-use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Arr;
 use Illuminate\View\View;
 use Yusronarif\Core\Support\Str;
@@ -83,7 +82,7 @@ if (!function_exists('fromResource')) {
      * @param \Illuminate\Http\Resources\Json\JsonResource $resource
      * @return mixed
      */
-    function fromResource(JsonResource $resource)
+    function fromResource($resource)
     {
         return json_decode(json_encode($resource));
     }
