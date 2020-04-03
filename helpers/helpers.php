@@ -12,33 +12,67 @@ if(! defined('DATE_FULL')) define('DATE_FULL', "LLL");
 if(! defined('DATE_FULL_SHORT')) define('DATE_FULL_SHORT', "lll");
 
 use Carbon\Carbon;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Arr;
+use Illuminate\View\View;
 use Yusronarif\Core\Support\Str;
 
 if (!function_exists('f')) {
-    function f($string = '')
+    /**
+     * @param string $text
+     * @return string
+     */
+    function f(string $text = '')
     {
-        return stripslashes(nl2br($string));
+        return stripslashes(nl2br($text));
     }
 }
 
 if (!function_exists('pretty_size')) {
     /**
-     * Returns a human readable file size.
+     * Human readable file size.
      *
      * @param int $bytes
-     *                      Bytes contains the size of the bytes to convert
      * @param int $decimals
-     *                      Number of decimal places to be returned
-     *
-     * @return string a string in human readable format
-     *
-     * */
-    function pretty_size($bytes, $decimals = 2)
+     * @return string
+     */
+    function pretty_size(int $bytes, int $decimals = 2)
     {
         $sz = 'BKMGTPE';
-        $factor = (int) floor((strlen($bytes) - 1) / 3);
+        $factor = floor((strlen($bytes) - 1) / 3);
 
         return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)).$sz[$factor];
+    }
+}
+
+if (! function_exists('setDefaultRequest')) {
+    /**
+     * Set Default Value for Request Input
+     *
+     * @param string|array $name
+     * @param null $value
+     */
+    function setDefaultRequest($name, $value = null) {
+        $request = request();
+
+        if (is_array($name)) {
+            foreach ($name as $key => $val) {
+                if (!empty($key) && !empty($val)) {
+                    setDefaultRequest($key, $val);
+                }
+            }
+        }
+        else {
+            if (!$request->session()->hasOldInput($name)) {
+                $request->session()->flash('_old_input.' . $name, $value);
+            }
+
+            if (strpos($name, '.', 1) > 0) {
+                $names = [];
+                Arr::set($names, $name, $value);
+                $request->request->set(key($names), Arr::first($names));
+            } else $request->request->set($name, $value);
+        }
     }
 }
 
@@ -46,11 +80,10 @@ if (!function_exists('fromResource')) {
     /**
      * Generate an collection from resource.
      *
-     * @param $resource
-     *
-     * @return mixed|object
+     * @param \Illuminate\Http\Resources\Json\JsonResource $resource
+     * @return mixed
      */
-    function fromResource($resource)
+    function fromResource(JsonResource $resource)
     {
         return json_decode(json_encode($resource));
     }
@@ -60,15 +93,14 @@ if (!function_exists('avatar')) {
     /**
      * Avatar Generator Helper.
      *
-     * @param $img
-     *
+     * @param string $imagePath
      * @return string
      */
-    function avatar($img)
+    function avatar(string $imagePath)
     {
         $path = preg_replace('/(\/)+$/i', '', config('arkid.app.avatar_path', 'assets/img/avatar'));
 
-        $avatar = asset($path.'/'.$img);
+        $avatar = asset($path.'/'.$imagePath);
 
         /*print_r(@get_headers($avatar));
         echo PHP_EOL;
@@ -100,10 +132,9 @@ if (!function_exists('vendor')) {
      * Generate an asset path for the application.
      *
      * @param string $path
-     *
      * @return string
      */
-    function vendor($path)
+    function vendor(string $path)
     {
         $vendorPath = config('app.vendor_url') ?? '';
         $vendorPath = $vendorPath !== '' ? $vendorPath : asset('vendor');
@@ -135,12 +166,10 @@ if (!function_exists('vendor')) {
 if (!function_exists('document')) {
     /**
      * Generate an asset path for the application.
-     *
      * @param string $path
-     *
      * @return string
      */
-    function document($path)
+    function document(string $path)
     {
         $root = config('app.document_url');
         $root = $root !== '' ? $root : asset('files');
@@ -154,13 +183,12 @@ if (!function_exists('plugins')) {
      * Retrive Application Plugins.
      * retriving from config's definitions.
      *
-     * @param string     $name
-     * @param mixed|path $base
-     * @param mixed      $type
-     *
-     * @return mixed
+     * @param string $name
+     * @param string $base
+     * @param array|null $type
+     * @return bool
      */
-    function plugins($name, $base = 'vendor', $type = null)
+    function plugins(string $name, string $base = 'vendor', array $type = null)
     {
         if (!$name) {
             return false;
@@ -318,7 +346,7 @@ if (!function_exists('is_dev')) {
      *
      * @return bool|\Illuminate\Session\SessionManager|\Illuminate\Session\Store|mixed|string
      */
-    function is_dev($is_true = '', $is_false = '')
+    function is_dev(string $is_true = '', string $is_false = '')
     {
         if (session('dev_mode') != null) {
             $return = session('dev_mode');
@@ -353,7 +381,7 @@ if (!function_exists('has_route')) {
      *
      * @return bool
      */
-    function has_route($name, $parameters = [], $absolute = true)
+    function has_route($name, array $parameters = [], bool $absolute = true)
     {
         return app('route')::has($name);
     }
@@ -370,7 +398,7 @@ if (!function_exists('routed')) {
      *
      * @return mixed
      */
-    function routed($name, $parameters = [], $absolute = true)
+    function routed($name, array $parameters = [], bool $absolute = true)
     {
         if (app('route')::has($name)) {
             return app('url')->route($name, $parameters, $absolute);
@@ -600,7 +628,6 @@ if (!function_exists('currency_format')) {
         return $format;
     }
 }
-
 
 if (!function_exists('get_raw_sql')) {
     /**
