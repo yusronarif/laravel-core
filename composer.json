@@ -1,6 +1,7 @@
 {
   "name": "yusronarif/laravel-core",
   "description": "Laravel Custom Core",
+  "keywords": ["php", "laravel", "library", "much", "yusron", "arif", "yusronarif"],
   "type": "library",
   "license": "MIT",
   "authors": [
@@ -27,8 +28,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Yusronarif\\Core\\": "src/",
-      "Yusronarif\\Core\\Test\\": "tests/"
+      "Yusronarif\\Core\\": "src/"
     },
     "files": [
       "helpers/helpers.php",
@@ -44,13 +44,14 @@
     "test": "phpunit"
   },
   "config": {
-    "optimize-autoloader": true,
-    "preferred-install": "dist",
     "sort-packages": true
   },
   "minimum-stability": "dev",
   "prefer-stable": true,
   "extra": {
+    "branch-alias": {
+      "dev-master": "2.x-dev"
+    },
     "laravel": {
       "providers": [
         "Yusronarif\\Core\\Providers\\DbServiceProvider",
