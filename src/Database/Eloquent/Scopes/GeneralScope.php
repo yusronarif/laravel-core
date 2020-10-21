@@ -2,7 +2,7 @@
 
 namespace Yusronarif\Core\Database\Eloquent\Scopes;
 
-use Illuminate\Database\Eloquent\Builder;
+use Yusronarif\Core\Database\Eloquent\Builder;
 
 trait GeneralScope
 {

@@ -2,14 +2,14 @@
 
 namespace Yusronarif\Core\Database\Eloquent;
 
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model as ParentModel;
+use Illuminate\Database\Eloquent\Model as BaseModel;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
+use Yusronarif\Core\Database\Eloquent\Builder;
 use Yusronarif\Core\Database\Eloquent\Concerns\HasTimestamps;
 use Yusronarif\Core\Database\Eloquent\Scopes\GeneralScope;
 
-class Model extends ParentModel
+class Model extends BaseModel
 {
     use HasTimestamps, GeneralScope;
 
@@ -33,6 +33,13 @@ class Model extends ParentModel
     const UPDATED_BY = 'updated_by';
 
     /**
+     * The unknown user executor
+     *
+     * @var string
+     */
+    protected $unknownPerformer = 'By System';
+
+    /**
      * Create a new Eloquent model instance.
      *
      * @param array $attributes
@@ -48,6 +55,19 @@ class Model extends ParentModel
     }
 
     /**
+     * Get the value indicating whether the IDs are incrementing.
+     *
+     * @return bool
+     */
+    public function getIncrementing()
+    {
+        if (in_array(strtolower($this->getKeyType()), ['string', 'uuid'])) {
+            return false;
+        }
+        return $this->incrementing;
+    }
+
+    /**
      * Perform a model insert operation.
      *
      * @param  \Yusronarif\Core\Database\Eloquent\Builder  $query
@@ -57,7 +77,7 @@ class Model extends ParentModel
     {
         if (in_array(strtolower($this->getKeyType()), ['string', 'uuid'])) {
             $this->setIncrementing(false);
-            $this->setAttribute($this->getKeyName(), Uuid::uuid4()->getHex());
+            $this->setAttribute($this->getKeyName(), (string) Uuid::uuid4()->getHex());
         }
 
         return parent::performInsert($query);
@@ -66,9 +86,9 @@ class Model extends ParentModel
     /**
      * Set the keys for a save update query.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param \Yusronarif\Core\Database\Eloquent\Builder $query
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Yusronarif\Core\Database\Eloquent\Builder
      */
     /*protected function setKeysForSaveQuery(Builder $query)
     {

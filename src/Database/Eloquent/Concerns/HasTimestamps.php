@@ -8,8 +8,6 @@ trait HasTimestamps
 {
     use BaseHasTimestamps;
 
-    protected $who = 'By System';
-
     /**
      * Set the value of the "created at" attribute.
      *
@@ -20,11 +18,11 @@ trait HasTimestamps
     public function setCreatedAt($value)
     {
         if (auth()->check()) {
-            $this->who = auth()->user()->name;
+            $this->unknownPerformer = auth()->user()->name;
         }
 
         $this->{static::CREATED_AT} = $value;
-        $this->{static::CREATED_BY} = $this->who;
+        $this->{static::CREATED_BY} = $this->unknownPerformer;
 
         return $this;
     }
@@ -39,11 +37,11 @@ trait HasTimestamps
     public function setUpdatedAt($value)
     {
         if (auth()->check()) {
-            $this->who = auth()->user()->name;
+            $this->unknownPerformer = auth()->user()->name;
         }
 
         $this->{static::UPDATED_AT} = $value;
-        $this->{static::UPDATED_BY} = $this->who;
+        $this->{static::UPDATED_BY} = $this->unknownPerformer;
 
         return $this;
     }
