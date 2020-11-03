@@ -13,13 +13,13 @@
     }
   ],
   "require": {
-    "php": "^7.2",
+    "php": "^7.3",
     "ext-json": "*",
-    "illuminate/auth": "^5.8|^6.0|^7.0|^8.0",
-    "illuminate/container": "^5.8|^6.0|^7.0|^8.0",
-    "illuminate/contracts": "^5.8|^6.0|^7.0|^8.0",
-    "illuminate/database": "^5.8|^6.0|^7.0|^8.0",
-    "illuminate/support": "^5.8|^6.0|^7.0|^8.0",
+    "illuminate/auth": "^7.0|^8.0",
+    "illuminate/container": "^7.0|^8.0",
+    "illuminate/contracts": "^7.0|^8.0",
+    "illuminate/database": "^7.0|^8.0",
+    "illuminate/support": "^7.0|^8.0",
     "nesbot/carbon": "^2.0",
     "ramsey/uuid": "^3.8|^4.0"
   },
@@ -48,7 +48,7 @@
   },
   "extra": {
     "branch-alias": {
-      "dev-master": "2.x-dev"
+      "dev-master": "3.x-dev"
     },
     "laravel": {
       "providers": [
