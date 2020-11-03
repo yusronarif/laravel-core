@@ -52,8 +52,7 @@
     },
     "laravel": {
       "providers": [
-        "Yusronarif\\Core\\Providers\\DbServiceProvider",
-        "Yusronarif\\Core\\Providers\\BladeServiceProvider"
+        "Yusronarif\\Core\\Providers\\ServiceProvider"
       ],
       "aliases": {}
     }

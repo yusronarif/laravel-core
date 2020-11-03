@@ -33,10 +33,10 @@ class Blueprint extends BaseBlueprint
     public function timestamps($precision = 0)
     {
         $this->timestamp('created_at', $precision)->nullable();
-        $this->string('created_by', 50)->nullable();
+        $this->foreignIdFor(config('yusronarifCore.model.users'), 'created_by')->nullable();
 
         $this->timestamp('updated_at', $precision)->nullable();
-        $this->string('updated_by', 50)->nullable();
+        $this->foreignIdFor(config('yusronarifCore.model.users'), 'updated_by')->nullable();
     }
 
     /**
@@ -50,9 +50,9 @@ class Blueprint extends BaseBlueprint
     public function softDeletes($column = 'deleted_at', $precision = 0)
     {
         $this->timestamp($column, $precision)->nullable();
-        $this->string('deleted_by', 50)->nullable();
+        $this->foreignIdFor(config('yusronarifCore.model.users'), 'deleted_by')->nullable();
         $this->timestamp('restore_at', $precision)->nullable();
-        $this->string('restore_by', 50)->nullable();
+        $this->foreignIdFor(config('yusronarifCore.model.users'), 'restore_by')->nullable();
     }
 
     /**
@@ -121,7 +121,7 @@ class Blueprint extends BaseBlueprint
                     if (!in_array("{$currentTable}_{$key}_foreign", $fkeys) && !in_array("{$fullTable}_{$key}_foreign", $fkeys)) {
                         $this->foreign($key)->references($vals['reference'])->on($tbl)
                             ->onUpdate(isset($vals['onUpdate']) ? $vals['onUpdate'] : 'cascade')
-                            ->onDelete(isset($vals['onDelete']) ? $vals['onDelete'] : 'cascade');
+                            ->onDelete(isset($vals['onDelete']) ? $vals['onDelete'] : 'restrict');
                     }
                 }
             }
