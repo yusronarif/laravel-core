@@ -9,6 +9,13 @@ trait HasTimestamps
     use BaseHasTimestamps;
 
     /**
+     * The unknown user executor
+     *
+     * @var string
+     */
+    protected $unknownPerformer = null;
+
+    /**
      * Set the value of the "created at" attribute.
      *
      * @param mixed $value
@@ -18,11 +25,11 @@ trait HasTimestamps
     public function setCreatedAt($value)
     {
         if (auth()->check()) {
-            $this->unknownPerformer = auth()->user()->name;
+            $this->unknownPerformer = auth()->user()->id;
         }
 
-        $this->{static::CREATED_AT} = $value;
-        $this->{static::CREATED_BY} = $this->unknownPerformer;
+        $this->{$this->getCreatedAtColumn()} = $value;
+        $this->{$this->getCreatedByColumn()} = $this->unknownPerformer;
 
         return $this;
     }
@@ -37,11 +44,11 @@ trait HasTimestamps
     public function setUpdatedAt($value)
     {
         if (auth()->check()) {
-            $this->unknownPerformer = auth()->user()->name;
+            $this->unknownPerformer = auth()->user()->id;
         }
 
-        $this->{static::UPDATED_AT} = $value;
-        $this->{static::UPDATED_BY} = $this->unknownPerformer;
+        $this->{$this->getUpdatedAtColumn()} = $value;
+        $this->{$this->getUpdatedByColumn()} = $this->unknownPerformer;
 
         return $this;
     }
@@ -53,7 +60,7 @@ trait HasTimestamps
      */
     public function getCreatedByColumn()
     {
-        return static::CREATED_BY;
+        return defined('static::CREATED_BY') ? static::CREATED_BY : 'created_by';
     }
 
     /**
@@ -63,6 +70,16 @@ trait HasTimestamps
      */
     public function getUpdatedByColumn()
     {
-        return static::UPDATED_BY;
+        return defined('static::UPDATED_BY') ? static::UPDATED_BY : 'updated_by';
+    }
+
+    public function creater()
+    {
+        return $this->belongsTo(config('yusronarifCore.model.users'), $this->getCreatedByColumn());
+    }
+
+    public function updater()
+    {
+        return $this->belongsTo(config('yusronarifCore.model.users'), $this->getUpdatedByColumn());
     }
 }

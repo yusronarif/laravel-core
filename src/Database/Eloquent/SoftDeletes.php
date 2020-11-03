@@ -8,7 +8,7 @@ trait SoftDeletes
 {
     use BaseSoftDeletes;
 
-    protected $who = 'By System';
+    protected $who = null;
 
     /**
      * Perform the actual delete query on this model instance.
@@ -20,7 +20,7 @@ trait SoftDeletes
         $query = $this->setKeysForSaveQuery($this->newModelQuery());
 
         if (auth()->check()) {
-            $this->who = auth()->user()->name;
+            $this->who = auth()->user()->id;
         }
 
         $time = $this->freshTimestamp();
@@ -59,7 +59,7 @@ trait SoftDeletes
         }
 
         if (auth()->check()) {
-            $this->who = auth()->user()->name;
+            $this->who = auth()->user()->id;
         }
 
         $this->{$this->getDeletedAtColumn()} = null;
@@ -137,5 +137,15 @@ trait SoftDeletes
     public function getQualifiedRestoreByColumn()
     {
         return $this->qualifyColumn($this->getRestoreByColumn());
+    }
+
+    public function deleter()
+    {
+        return $this->belongsTo(config('yusronarifCore.model.users'), $this->getDeletedByColumn());
+    }
+
+    public function restorer()
+    {
+        return $this->belongsTo(config('yusronarifCore.model.users'), $this->getRestoreByColumn());
     }
 }
