@@ -2,6 +2,7 @@
 
 namespace Yusronarif\Core\Database\Schema;
 
+use App\Models\User;
 use Closure;
 use Illuminate\Database\Schema\Blueprint as BaseBlueprint;
 use Illuminate\Support\Facades\Schema;
@@ -9,6 +10,8 @@ use Yusronarif\Core\Support\Str;
 
 class Blueprint extends BaseBlueprint
 {
+    private $tableUser = '';
+
     /**
      * Create a new schema blueprint.
      *
@@ -21,6 +24,9 @@ class Blueprint extends BaseBlueprint
     public function __construct($table, Closure $callback = null, $prefix = '')
     {
         parent::__construct($table, $callback, $prefix);
+
+        $userModel = config('yusronarifCore.model.users');
+        $this->tableUser = (new $userModel)->getTable();
     }
 
     /**
@@ -33,10 +39,10 @@ class Blueprint extends BaseBlueprint
     public function timestamps($precision = 0)
     {
         $this->timestamp('created_at', $precision)->nullable();
-        $this->foreignIdFor(config('yusronarifCore.model.users'), 'created_by')->nullable();
+        $this->foreignId('created_by')->constrained($this->tableUser)->nullable();
 
         $this->timestamp('updated_at', $precision)->nullable();
-        $this->foreignIdFor(config('yusronarifCore.model.users'), 'updated_by')->nullable();
+        $this->foreignId('updated_by')->constrained($this->tableUser)->nullable();
     }
 
     /**
@@ -50,9 +56,9 @@ class Blueprint extends BaseBlueprint
     public function softDeletes($column = 'deleted_at', $precision = 0)
     {
         $this->timestamp($column, $precision)->nullable();
-        $this->foreignIdFor(config('yusronarifCore.model.users'), 'deleted_by')->nullable();
+        $this->foreignId('deleted_by')->constrained($this->tableUser)->nullable();
         $this->timestamp('restore_at', $precision)->nullable();
-        $this->foreignIdFor(config('yusronarifCore.model.users'), 'restore_by')->nullable();
+        $this->foreignId('restore_by')->constrained($this->tableUser)->nullable();
     }
 
     /**
