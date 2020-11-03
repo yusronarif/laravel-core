@@ -2,11 +2,11 @@
 
 namespace Yusronarif\Core\Database;
 
-use Illuminate\Database\PostgresConnection as ParentConnection;
-//use Illuminate\Database\Schema\PostgresBuilder as ParentBuilder;
+use Illuminate\Database\PostgresConnection as BaseConnection;
+//use Illuminate\Database\Schema\PostgresBuilder as BaseBuilder;
 use Yusronarif\Core\Database\Schema\Blueprint;
 
-class PgSqlConnection extends ParentConnection
+class PgSqlConnection extends BaseConnection
 {
     public function getSchemaBuilder()
     {

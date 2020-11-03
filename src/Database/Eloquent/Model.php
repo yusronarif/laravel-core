@@ -5,7 +5,6 @@ namespace Yusronarif\Core\Database\Eloquent;
 use Illuminate\Database\Eloquent\Model as BaseModel;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
-use Yusronarif\Core\Database\Eloquent\Builder;
 use Yusronarif\Core\Database\Eloquent\Concerns\HasTimestamps;
 use Yusronarif\Core\Database\Eloquent\Scopes\GeneralScope;
 
@@ -17,27 +16,6 @@ class Model extends BaseModel
      * The list of table wich include with schema
      */
     protected $fullnameTable = [];
-
-    /**
-     * The name of the "created at" column.
-     *
-     * @var string
-     */
-    const CREATED_BY = 'created_by';
-
-    /**
-     * The name of the "updated at" column.
-     *
-     * @var string
-     */
-    const UPDATED_BY = 'updated_by';
-
-    /**
-     * The unknown user executor
-     *
-     * @var string
-     */
-    protected $unknownPerformer = 'By System';
 
     /**
      * Create a new Eloquent model instance.
@@ -70,7 +48,7 @@ class Model extends BaseModel
     /**
      * Perform a model insert operation.
      *
-     * @param  \Yusronarif\Core\Database\Eloquent\Builder  $query
+     * @param  Builder  $query
      * @return bool
      */
     protected function performInsert(Builder $query)
@@ -86,9 +64,9 @@ class Model extends BaseModel
     /**
      * Set the keys for a save update query.
      *
-     * @param \Yusronarif\Core\Database\Eloquent\Builder $query
+     * @param Builder $query
      *
-     * @return \Yusronarif\Core\Database\Eloquent\Builder
+     * @return Builder
      */
     /*protected function setKeysForSaveQuery(Builder $query)
     {
