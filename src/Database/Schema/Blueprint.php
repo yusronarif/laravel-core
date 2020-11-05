@@ -12,7 +12,7 @@ class Blueprint extends BaseBlueprint
     /**
      * @var string  users|plain
      */
-    protected $performerMode = 'users';
+    public $performerMode = 'users';
 
     /**
      * @var string
