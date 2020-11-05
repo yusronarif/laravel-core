@@ -2,7 +2,6 @@
 
 namespace Yusronarif\Core\Database\Schema;
 
-use App\Models\User;
 use Closure;
 use Illuminate\Database\Schema\Blueprint as BaseBlueprint;
 use Illuminate\Support\Facades\Schema;
@@ -10,6 +9,14 @@ use Yusronarif\Core\Support\Str;
 
 class Blueprint extends BaseBlueprint
 {
+    /**
+     * @var string  users|plain
+     */
+    protected $performerMode = 'users';
+
+    /**
+     * @var string
+     */
     private $tableUser = '';
 
     /**
@@ -39,10 +46,20 @@ class Blueprint extends BaseBlueprint
     public function timestamps($precision = 0)
     {
         $this->timestamp('created_at', $precision)->nullable();
-        $this->foreignId('created_by')->constrained($this->tableUser)->nullable();
+        if ($this->performerMode == 'users') {
+            $this->foreignId('created_by')->nullable()
+                ->constrained($this->tableUser)->onUpdate('cascade')->onDelete('restrict');
+        } else {
+            $this->string('created_by', 100)->nullable();
+        }
 
         $this->timestamp('updated_at', $precision)->nullable();
-        $this->foreignId('updated_by')->constrained($this->tableUser)->nullable();
+        if ($this->performerMode == 'users') {
+            $this->foreignId('updated_by')->nullable()
+                ->constrained($this->tableUser)->onUpdate('cascade')->onDelete('restrict');
+        } else {
+            $this->string('updated_by', 100)->nullable();
+        }
     }
 
     /**
@@ -56,9 +73,20 @@ class Blueprint extends BaseBlueprint
     public function softDeletes($column = 'deleted_at', $precision = 0)
     {
         $this->timestamp($column, $precision)->nullable();
-        $this->foreignId('deleted_by')->constrained($this->tableUser)->nullable();
+        if ($this->performerMode == 'users') {
+            $this->foreignId('deleted_by')->nullable()
+                ->constrained($this->tableUser)->onUpdate('cascade')->onDelete('restrict');
+        } else {
+            $this->string('deleted_by', 100)->nullable();
+        }
+
         $this->timestamp('restore_at', $precision)->nullable();
-        $this->foreignId('restore_by')->constrained($this->tableUser)->nullable();
+        if ($this->performerMode == 'users') {
+            $this->foreignId('restore_by')->nullable()
+                ->constrained($this->tableUser)->onUpdate('cascade')->onDelete('restrict');
+        } else {
+            $this->string('restore_by', 100)->nullable();
+        }
     }
 
     /**

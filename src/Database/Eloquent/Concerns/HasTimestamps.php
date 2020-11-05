@@ -9,13 +9,6 @@ trait HasTimestamps
     use BaseHasTimestamps;
 
     /**
-     * The unknown user executor
-     *
-     * @var string
-     */
-    protected $unknownPerformer = null;
-
-    /**
      * Set the value of the "created at" attribute.
      *
      * @param mixed $value
@@ -25,11 +18,14 @@ trait HasTimestamps
     public function setCreatedAt($value)
     {
         if (auth()->check()) {
-            $this->unknownPerformer = auth()->user()->id;
+            if ($this->performerMode == 'users')
+                $this->performBy = auth()->user()->id;
+            else
+                $this->performBy = auth()->user()->name ?? auth()->user()->username ?? auth()->user()->email ?? auth()->user()->id;
         }
 
         $this->{$this->getCreatedAtColumn()} = $value;
-        $this->{$this->getCreatedByColumn()} = $this->unknownPerformer;
+        $this->{$this->getCreatedByColumn()} = $this->performBy;
 
         return $this;
     }
@@ -44,11 +40,14 @@ trait HasTimestamps
     public function setUpdatedAt($value)
     {
         if (auth()->check()) {
-            $this->unknownPerformer = auth()->user()->id;
+            if ($this->performerMode == 'users')
+                $this->performBy = auth()->user()->id;
+            else
+                $this->performBy = auth()->user()->name ?? auth()->user()->username ?? auth()->user()->email ?? auth()->user()->id;
         }
 
         $this->{$this->getUpdatedAtColumn()} = $value;
-        $this->{$this->getUpdatedByColumn()} = $this->unknownPerformer;
+        $this->{$this->getUpdatedByColumn()} = $this->performBy;
 
         return $this;
     }

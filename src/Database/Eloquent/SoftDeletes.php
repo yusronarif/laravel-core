@@ -8,8 +8,6 @@ trait SoftDeletes
 {
     use BaseSoftDeletes;
 
-    protected $who = null;
-
     /**
      * Perform the actual delete query on this model instance.
      *
@@ -20,25 +18,28 @@ trait SoftDeletes
         $query = $this->setKeysForSaveQuery($this->newModelQuery());
 
         if (auth()->check()) {
-            $this->who = auth()->user()->id;
+            if ($this->performerMode == 'users')
+                $this->performBy = auth()->user()->id;
+            else
+                $this->performBy = auth()->user()->name ?? auth()->user()->username ?? auth()->user()->email ?? auth()->user()->id;
         }
 
         $time = $this->freshTimestamp();
 
         $columns = [
             $this->getDeletedAtColumn() => $this->fromDateTime($time),
-            $this->getDeletedByColumn() => $this->who,
+            $this->getDeletedByColumn() => $this->performBy,
         ];
 
         $this->{$this->getDeletedAtColumn()} = $time;
-        $this->{$this->getDeletedByColumn()} = $this->who;
+        $this->{$this->getDeletedByColumn()} = $this->performBy;
 
         if ($this->timestamps && !is_null($this->getUpdatedAtColumn())) {
             $this->{$this->getUpdatedAtColumn()} = $time;
-            $this->{$this->getUpdatedByColumn()} = $this->who;
+            $this->{$this->getUpdatedByColumn()} = $this->performBy;
 
             $columns[$this->getUpdatedAtColumn()] = $this->fromDateTime($time);
-            $columns[$this->getUpdatedByColumn()] = $this->who;
+            $columns[$this->getUpdatedByColumn()] = $this->performBy;
         }
 
         $query->update($columns);
@@ -59,13 +60,16 @@ trait SoftDeletes
         }
 
         if (auth()->check()) {
-            $this->who = auth()->user()->id;
+            if ($this->performerMode == 'users')
+                $this->performBy = auth()->user()->id;
+            else
+                $this->performBy = auth()->user()->name ?? auth()->user()->username ?? auth()->user()->email ?? auth()->user()->id;
         }
 
         $this->{$this->getDeletedAtColumn()} = null;
         $this->{$this->getDeletedByColumn()} = null;
         $this->{$this->getRestoreAtColumn()} = $this->freshTimestamp();
-        $this->{$this->getRestoreByColumn()} = $this->who;
+        $this->{$this->getRestoreByColumn()} = $this->performBy;
 
         // Once we have saved the model, we will fire the "restored" event so this
         // developer will do anything they need to after a restore operation is

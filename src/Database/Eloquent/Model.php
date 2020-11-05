@@ -18,6 +18,18 @@ class Model extends BaseModel
     protected $fullnameTable = [];
 
     /**
+     * @var string  users|plain
+     */
+    protected $performerMode = 'users';
+
+    /**
+     * Who is (user) as executor
+     *
+     * @var string
+     */
+    protected $performBy = null;
+
+    /**
      * Create a new Eloquent model instance.
      *
      * @param array $attributes
