@@ -3,6 +3,7 @@
 namespace Yusronarif\Core\Database\Eloquent;
 
 use Illuminate\Database\Eloquent\Model as BaseModel;
+use Illuminate\Database\Eloquent\RelationNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
 use Yusronarif\Core\Database\Eloquent\Concerns\HasTimestamps;
@@ -111,4 +112,17 @@ class Model extends BaseModel
 
         return $this->getAttribute($keyName);
     }*/
+
+
+    /**
+     * generate performer from plain performer
+     *
+     * @param string|null $performer
+     */
+    protected function performerAsPlain(string $performer = 'By System')
+    {
+        if (empty($performer)) throw new RelationNotFoundException();
+
+        return DB::select(DB::raw("SELECT null AS id, '{$performer}' AS name, '{$performer}' AS username, '{$performer}' AS email"));
+    }
 }

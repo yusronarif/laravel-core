@@ -74,11 +74,17 @@ trait HasTimestamps
 
     public function creater()
     {
-        return $this->belongsTo(config('yusronarifCore.model.users'), $this->getCreatedByColumn());
+        if ($this->performerMode == 'users')
+            return $this->belongsTo(config('yusronarifCore.model.users'), $this->getCreatedByColumn());
+        else
+            return $this->performerAsPlain($this->getCreatedByColumn());
     }
 
     public function updater()
     {
-        return $this->belongsTo(config('yusronarifCore.model.users'), $this->getUpdatedByColumn());
+        if ($this->performerMode == 'users')
+            return $this->belongsTo(config('yusronarifCore.model.users'), $this->getUpdatedByColumn());
+        else
+            return $this->performerAsPlain($this->getUpdatedByColumn());
     }
 }

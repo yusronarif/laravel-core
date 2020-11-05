@@ -145,11 +145,17 @@ trait SoftDeletes
 
     public function deleter()
     {
-        return $this->belongsTo(config('yusronarifCore.model.users'), $this->getDeletedByColumn());
+        if ($this->performerMode == 'users')
+            return $this->belongsTo(config('yusronarifCore.model.users'), $this->getDeletedByColumn());
+        else
+            return $this->performerAsPlain($this->getDeletedByColumn());
     }
 
     public function restorer()
     {
-        return $this->belongsTo(config('yusronarifCore.model.users'), $this->getRestoreByColumn());
+        if ($this->performerMode == 'users')
+            return $this->belongsTo(config('yusronarifCore.model.users'), $this->getRestoreByColumn());
+        else
+            return $this->performerAsPlain($this->getRestoreByColumn());
     }
 }
