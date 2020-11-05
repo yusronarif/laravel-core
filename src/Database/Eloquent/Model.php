@@ -61,7 +61,7 @@ class Model extends BaseModel
     /**
      * Perform a model insert operation.
      *
-     * @param  Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return bool
      */
     protected function performInsert(Builder $query)
@@ -77,9 +77,9 @@ class Model extends BaseModel
     /**
      * Set the keys for a save update query.
      *
-     * @param Builder $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      *
-     * @return Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     /*protected function setKeysForSaveQuery(Builder $query)
     {
