@@ -21,13 +21,13 @@ if (!function_exists('f')) {
      * @param string $text
      * @return string
      */
-    function f(string $text = '')
+    function f(string $text = ''): string
     {
         return stripslashes(nl2br($text));
     }
 }
 
-if (!function_exists('pretty_size')) {
+if (!function_exists('prettySize')) {
     /**
      * Human readable file size.
      *
@@ -35,10 +35,10 @@ if (!function_exists('pretty_size')) {
      * @param int $decimals
      * @return string
      */
-    function pretty_size(int $bytes, int $decimals = 2)
+    function prettySize(int $bytes, int $decimals = 2): string
     {
         $sz = 'BKMGTPE';
-        $factor = floor((strlen($bytes) - 1) / 3);
+        $factor = (int) floor((strlen($bytes) - 1) / 3);
 
         return sprintf("%.{$decimals}f", $bytes / pow(1024, $factor)).$sz[$factor];
     }
@@ -51,7 +51,8 @@ if (! function_exists('setDefaultRequest')) {
      * @param string|array $name
      * @param null $value
      */
-    function setDefaultRequest($name, $value = null) {
+    function setDefaultRequest(string|array $name, mixed $value = null): void
+    {
         $request = request();
 
         if (is_array($name)) {
@@ -82,47 +83,9 @@ if (!function_exists('fromResource')) {
      * @param \Illuminate\Http\Resources\Json\JsonResource $resource
      * @return mixed
      */
-    function fromResource($resource)
+    function fromResource(\Illuminate\Http\Resources\Json\JsonResource $resource): mixed
     {
         return json_decode(json_encode($resource));
-    }
-}
-
-if (!function_exists('avatar')) {
-    /**
-     * Avatar Generator Helper.
-     *
-     * @param string $imagePath
-     * @return string
-     */
-    function avatar(string $imagePath)
-    {
-        $path = preg_replace('/(\/)+$/i', '', config('arkid.app.avatar_path', 'assets/img/avatar'));
-
-        $avatar = asset($path.'/'.$imagePath);
-
-        /*print_r(@get_headers($avatar));
-        echo PHP_EOL;
-        print_r(@get_headers($avatar)[0]);
-        echo PHP_EOL;
-        if(strstr(@get_headers($avatar)[0], '200')) {
-            echo 'found';
-        }
-        else echo 'not found';
-        echo PHP_EOL;*/
-
-        stream_context_set_default([
-            'ssl' => [
-                'verify_peer'      => false,
-                'verify_peer_name' => false,
-            ],
-        ]);
-
-        if (!strstr(@get_headers($avatar)[0], '200')) {
-            $avatar = vendor('assets/img/_blank_avatar.png');
-        }
-
-        return $avatar;
     }
 }
 
@@ -133,7 +96,7 @@ if (!function_exists('vendor')) {
      * @param string $path
      * @return string
      */
-    function vendor(string $path)
+    function vendor(string $path): string
     {
         $vendorPath = config('app.vendor_url') ?? '';
         $vendorPath = $vendorPath !== '' ? $vendorPath : asset('vendor');
@@ -168,12 +131,9 @@ if (!function_exists('document')) {
      * @param string $path
      * @return string
      */
-    function document(string $path)
+    function document(string $path): string
     {
-        $root = config('app.document_url');
-        $root = $root !== '' ? $root : asset('files');
-
-        return $root.'/'.$path;
+        return config('app.document_url', asset('files')) ."/{$path}";
     }
 }
 
@@ -185,15 +145,15 @@ if (!function_exists('plugins')) {
      * @param string $name
      * @param string $base
      * @param array|null $type
-     * @return bool
+     * @return void
      */
-    function plugins(string $name, string $base = 'vendor', array $type = null)
+    function plugins(string $name, string $base = 'vendor', array $type = null): void
     {
         if (!$name) {
-            return false;
+            return;
         }
         if (!in_array($base, ['vendor', 'local'])) {
-            return false;
+            return;
         }
 
         if (!is_array($name)) {
@@ -228,22 +188,23 @@ if (!function_exists('plugins')) {
             $rs['js'] = implode('', $rs['js']);
         }
 
-        return View::share(['pluginCss' => $rs['css'], 'pluginJs' => $rs['js']]);
+        View::share(['pluginCss' => $rs['css'], 'pluginJs' => $rs['js']]);
     }
 }
 
-if (!function_exists('plugin_assets')) {
+if (!function_exists('pluginAssets')) {
     /**
      * Retrive Application Plugins's Assets.
      * retriving from config's definitions.
      *
-     * @param string     $name
-     * @param mixed|path $base
-     * @param mixed      $type
+     * @param string    $names
+     * @param string    $base
+     * @param ?string   $type
+     * @param string    $parent
      *
-     * @return mixed
+     * @return array
      */
-    function plugin_assets($names, $base = 'vendor', $type = null, $parent = '')
+    function pluginAssets(string $names, string $base = 'vendor', ?string $type = null, string $parent = ''): array
     {
         if (!is_array($names)) {
             $names = [$names];
@@ -320,19 +281,18 @@ if (!function_exists('carbon')) {
     /**
      * Carbon helper.
      *
-     * @param null|datetime $datetime
+     * @param string|DateTimeInterface|null $datetime
+     * @param DateTimeZone|string|null      $tz
      *
      * @return Carbon|null
      */
-    function carbon($datetime = null)
+    function carbon(DateTimeInterface|string|null $datetime = null, DateTimeZone|string|null $tz = 'Asia/Jakarta'): ?Carbon
     {
-        if (!$datetime) {
-            $datetime = Carbon::now();
-        } else {
-            $datetime = Carbon::parse($datetime);
+        try {
+            return !$datetime ? Carbon::now($tz) : Carbon::parse($datetime, $tz);
+        } catch (\Exception $e) {
+            return carbon($datetime, 'Asia/Jakarta');
         }
-
-        return $datetime;
     }
 }
 
@@ -370,19 +330,17 @@ if (!function_exists('is_dev')) {
     }
 }
 
-if (!function_exists('has_route')) {
+if (!function_exists('hasRoute')) {
     /**
      * Existing Route by Name.
      *
-     * @param $name
-     * @param array $parameters
-     * @param bool  $absolute
+     * @param string    $name
      *
      * @return bool
      */
-    function has_route($name, array $parameters = [], bool $absolute = true)
+    function hasRoute(string $name): bool
     {
-        return app('route')::has($name);
+        return app('route')->has($name);
     }
 }
 
@@ -391,15 +349,15 @@ if (!function_exists('routed')) {
      * Existing Route by Name
      * with '#' fallback.
      *
-     * @param $name
-     * @param array $parameters
-     * @param bool  $absolute
+     * @param string    $name
+     * @param array     $parameters
+     * @param bool      $absolute
      *
-     * @return mixed
+     * @return string
      */
-    function routed($name, array $parameters = [], bool $absolute = true)
+    function routed(string $name, array $parameters = [], bool $absolute = true): string
     {
-        if (app('route')::has($name)) {
+        if (app('route')->has($name)) {
             return app('url')->route($name, $parameters, $absolute);
         }
 
@@ -407,130 +365,8 @@ if (!function_exists('routed')) {
     }
 }
 
-if (!function_exists('money_format')) {
-    /*
-    That it is an implementation of the function money_format for the
-    platforms that do not it bear.
-
-    The function accepts to same string of format accepts for the
-    original function of the PHP.
-
-    (Sorry. my writing in English is very bad)
-
-    The function is tested using PHP 5.1.4 in Windows XP
-    and Apache WebServer.
-    */
-    function money_format($format, $number) {
-        $regex = '/%((?:[\^!\-]|\+|\(|\=.)*)([0-9]+)?' .
-            '(?:#([0-9]+))?(?:\.([0-9]+))?([in%])/';
-        if (setlocale(LC_MONETARY, 0) == 'C') {
-            setlocale(LC_MONETARY, '');
-        }
-        $locale = localeconv();
-        preg_match_all($regex, $format, $matches, PREG_SET_ORDER);
-        foreach ($matches as $fmatch) {
-            $value = floatval($number);
-            $flags = array(
-                'fillchar' => preg_match('/\=(.)/', $fmatch[1], $match) ?
-                    $match[1] : ' ',
-                'nogroup' => preg_match('/\^/', $fmatch[1]) > 0,
-                'usesignal' => preg_match('/\+|\(/', $fmatch[1], $match) ?
-                    $match[0] : '+',
-                'nosimbol' => preg_match('/\!/', $fmatch[1]) > 0,
-                'isleft' => preg_match('/\-/', $fmatch[1]) > 0
-            );
-            $width = trim($fmatch[2]) ? (int)$fmatch[2] : 0;
-            $left = trim($fmatch[3]) ? (int)$fmatch[3] : 0;
-            $right = trim($fmatch[4]) ? (int)$fmatch[4] : $locale['int_frac_digits'];
-            $conversion = $fmatch[5];
-
-            $positive = true;
-            if ($value < 0) {
-                $positive = false;
-                $value *= -1;
-            }
-            $letter = $positive ? 'p' : 'n';
-
-            $prefix = $suffix = $cprefix = $csuffix = $signal = '';
-
-            $signal = $positive ? $locale['positive_sign'] : $locale['negative_sign'];
-            switch (true) {
-                case $locale["{$letter}_sign_posn"] == 1 && $flags['usesignal'] == '+':
-                    $prefix = $signal;
-                    break;
-                case $locale["{$letter}_sign_posn"] == 2 && $flags['usesignal'] == '+':
-                    $suffix = $signal;
-                    break;
-                case $locale["{$letter}_sign_posn"] == 3 && $flags['usesignal'] == '+':
-                    $cprefix = $signal;
-                    break;
-                case $locale["{$letter}_sign_posn"] == 4 && $flags['usesignal'] == '+':
-                    $csuffix = $signal;
-                    break;
-                case $flags['usesignal'] == '(':
-                case $locale["{$letter}_sign_posn"] == 0:
-                    $prefix = '(';
-                    $suffix = ')';
-                    break;
-            }
-            if (!$flags['nosimbol']) {
-                $currency = $cprefix .
-                    ($conversion == 'i' ? $locale['int_curr_symbol'] : $locale['currency_symbol']) .
-                    $csuffix;
-            } else {
-                $currency = '';
-            }
-            $space = $locale["{$letter}_sep_by_space"] ? ' ' : '';
-
-            $value = number_format(
-                $value,
-                $right,
-                $locale['mon_decimal_point'],
-                $flags['nogroup'] ? '' : $locale['mon_thousands_sep']
-            );
-            $value = @explode($locale['mon_decimal_point'], $value);
-
-            $n = strlen($prefix) + strlen($currency) + strlen($value[0]);
-            if ($left > 0 && $left > $n) {
-                $value[0] = str_repeat($flags['fillchar'], $left - $n) . $value[0];
-            }
-            $value = implode($locale['mon_decimal_point'], $value);
-            if ($locale["{$letter}_cs_precedes"]) {
-                $value = $prefix . $currency . $space . $value . $suffix;
-            } else {
-                $value = $prefix . $value . $space . $currency . $suffix;
-            }
-            if ($width > 0) {
-                $value = str_pad(
-                    $value,
-                    $width,
-                    $flags['fillchar'],
-                    $flags['isleft'] ?
-                        STR_PAD_RIGHT : STR_PAD_LEFT
-                );
-            }
-
-            $format = str_replace($fmatch[0], $value, $format);
-        }
-
-        return $format;
-    }
-}
-
-if (!function_exists('currency_format')) {
-    /*
-    That it is an implementation of the function money_format for the
-    platforms that do not it bear.
-
-    The function accepts to same string of format accepts for the
-    original function of the PHP.
-
-    (Sorry. my writing in English is very bad)
-
-    The function is tested using PHP 5.1.4 in Windows XP
-    and Apache WebServer.
-    */
-    function currency_format($format, $number)
+if (!function_exists('currencyFormat')) {
+    function currencyFormat(string $format, int|float $number): string
     {
         $regex = '/%((?:[\^!\-]|\+|\(|\=.)*)([0-9]+)?' .
             '(?:#([0-9]+))?(?:\.([0-9]+))?([in%])/';
@@ -628,12 +464,12 @@ if (!function_exists('currency_format')) {
     }
 }
 
-if (!function_exists('get_raw_sql')) {
+if (!function_exists('getRawSql')) {
     /**
-     * @param \Illuminate\Database\Query\Builder $query
-     * @return Generator
+     * @param \Illuminate\Database\Query\Builder|\Yusronarif\Core\Database\Query\Builder $query
+     * @return string
      */
-    function get_raw_sql($query)
+    function getRawSql(\Illuminate\Database\Query\Builder|\Yusronarif\Core\Database\Query\Builder $query): string
     {
         return Str::replaceArray('?', $query->getBindings(), $query->toSql());
     }

@@ -2,8 +2,9 @@
 
 namespace Yusronarif\Core\Routing;
 
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
-use phpDocumentor\Reflection\Types\This;
+use Illuminate\View\View;
 
 /**
  * Controller base class.
@@ -14,71 +15,53 @@ class Controller extends BaseController
 {
     /**
      * Authenticated User
-     *
-     * @var Illuminate\Http\Request
      */
-    protected $request;
+    protected Request $request;
 
     /**
      * Controller data.
-     *
-     * @var array
      */
-    private $data = [];
+    private array $controllerData = [];
 
     /**
      * Active menu indicator.
-     *
-     * @var array
      */
-    private $activeMenu = [];
-    private $activeMenuPack = [];
+    private array $activeMenu = [];
+    private array $activeMenuPack = [];
 
     /**
      * Page title.
-     *
-     * @var string
      */
-    private $pageTitle;
+    private string $pageTitle;
 
     /**
      * Page Meta.
-     *
-     * @var array
      */
-    private $pageMeta = [
+    private array $pageMeta = [
         'description' => null,
         'keywords' => null,
     ];
 
     /**
      * Reserved variable for the controller.
-     *
-     * @var array
      */
-    private $reservedVariables = ['activeMenu', 'activeMenuPack', 'pageTitle', 'pageMeta'];
+    private array $reservedVariables = ['activeMenu', 'activeMenuPack', 'pageTitle', 'pageMeta'];
 
     /**
      * Prefix View Path
-     *
-     * @var string
      */
-    protected $prefixView = '';
-    protected $viewPath = '';
+    protected string $prefixView = '';
+    protected string $viewPath = '';
 
     /**
      * type of crud form
-     *
-     * @var string
      */
-    protected $crudType = '';
+    protected string $crudType = '';
 
     /**
      * main route name
-     *
-     * @var string
      */
-    protected $route = '';
+    protected string $route = '';
 
     /**
      * Controller constructor.
@@ -94,44 +77,42 @@ class Controller extends BaseController
      *
      * @param string $view
      *
-     * @return \Illuminate\View\View
+     * @return View
      */
-    protected function view($view)
+    protected function view(string $view): View
     {
         $this->share();
 
         if ($this->prefixView)
             $view = preg_replace('/(\.)+$/i', '', $this->prefixView) . '.' . $view;
 
-        return view($view, $this->data);
+        return view($view, $this->controllerData);
     }
 
-    private function share()
+    private function share(): void
     {
-        if (false === array_key_exists('pageTitle', $this->data)) {
+        if (false === array_key_exists('pageTitle', $this->controllerData)) {
             $this->setPageTitle('Untitled');
         }
 
         $this->setPageMeta('csrf_token', csrf_token());
 
-        $this->data['activeUser'] = auth()->user();
+        $this->controllerData['activeUser'] = auth()->user();
 
-        $this->data['crudType'] = $this->crudType;
-        $this->data['viewPath'] = ($this->viewPath ?: $this->prefixView) . '.';
-        $this->data['route'] = $this->route;
-
-        return $this;
+        $this->controllerData['crudType'] = $this->crudType;
+        $this->controllerData['viewPath'] = ($this->viewPath ?: $this->prefixView) . '.';
+        $this->controllerData['route'] = $this->route;
     }
 
     /**
      * Set Default Value for Request Input
      *
      * @param string|array $name
-     * @param null $value
+     * @param mixed $value
      *
-     * @return Illuminate\Http\Request
+     * @return void
      */
-    protected function setDefault($name, $value = null)
+    protected function setDefault(string|array $name, mixed $value = null): void
     {
         if (!$this->request->input()) {
             setDefaultRequest($name, $value);
@@ -144,33 +125,29 @@ class Controller extends BaseController
      * @param string $name
      * @param mixed  $value
      *
-     * @return Controller
+     * @return void
      *
      * @throws \Exception
      */
-    protected function setData($name, $value)
+    protected function setData(string $name, mixed $value): void
     {
         if (in_array($name, $this->reservedVariables)) {
             throw new \Exception("Variable [$name] is reserved by this controller");
         }
-        $this->data[$name] = $value;
-
-        return $this;
+        $this->controllerData[$name] = $value;
     }
 
     /**
      * Set page meta.
      *
-     * @param string $metaKey
-     * @param mixed  $metaValue
+     * @param string $key
+     * @param mixed  $value
      *
-     * @return Controller
+     * @return void
      */
-    protected function setPageMeta($metaKey, $metaValue)
+    protected function setPageMeta(string $key, mixed $value): void
     {
-        $this->pageMeta[$metaKey] = $metaValue;
-
-        return $this;
+        $this->pageMeta[$key] = $value;
     }
 
     /**
@@ -178,46 +155,32 @@ class Controller extends BaseController
      *
      * @param string $title
      *
-     * @return Controller
+     * @return void
      */
-    protected function setPageTitle($title)
+    protected function setPageTitle(string $title): void
     {
-        $this->data['pageTitle'] = $title;
-
-        return $this;
+        $this->controllerData['pageTitle'] = $title;
     }
 
     /**
      * Set Active Menu.
      *
-     * @param $menu
-     * @return $this
+     * @param string|array  $menu
+     * @return void
      */
-    protected function setActiveMenu($menu)
+    protected function setActiveMenu(string|array $menu): void
     {
-        if (is_array($menu)) {
-            $this->activeMenu = $menu;
-        } else {
-            $this->activeMenu = array($menu);
-        }
-
-        return $this;
+        $this->activeMenu = (array) $menu;
     }
 
     /**
      * Add Active Menu.
      *
-     * @param $menu
-     * @return $this
+     * @param string|array  $menu
+     * @return void
      */
-    protected function addActiveMenu($menu)
+    protected function addActiveMenu(string|array $menu): void
     {
-        if (is_array($menu)) {
-            $this->activeMenu = array_merge($this->activeMenu, $menu);
-        } else {
-            array_push($this->activeMenu, $menu);
-        }
-
-        return $this;
+        $this->activeMenu = array_merge($this->activeMenu, (array) $menu);
     }
 }

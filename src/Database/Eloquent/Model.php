@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model as BaseModel;
 use Illuminate\Database\Eloquent\RelationNotFoundException;
 use Illuminate\Support\Facades\DB;
-use Ramsey\Uuid\Uuid;
 use Yusronarif\Core\Database\Eloquent\Concerns\HasTimestamps;
 use Yusronarif\Core\Database\Eloquent\Scopes\GeneralScope;
+use Yusronarif\Core\Support\Str;
 
 class Model extends BaseModel
 {
@@ -17,17 +17,15 @@ class Model extends BaseModel
     /*
      * The list of table wich include with schema
      */
-    protected $fullnameTable = [];
+    protected string|array $fullnameTable = [];
 
     /**
      * @var string  users|plain
      */
-    protected $performerMode = 'users';
+    protected string $performerMode = 'users';
 
     /**
      * Who is (user) as executor
-     *
-     * @var string
      */
     protected $performBy = null;
 
@@ -67,9 +65,9 @@ class Model extends BaseModel
      */
     protected function performInsert(Builder $query)
     {
-        if (in_array(strtolower($this->getKeyType()), ['string', 'uuid'])) {
+        if (in_array($keyType = strtolower($this->getKeyType()), ['string', 'uuid'])) {
             $this->setIncrementing(false);
-            $this->setAttribute($this->getKeyName(), (string) Uuid::uuid4()->getHex());
+            $this->setAttribute($this->getKeyName(), ($keyType=='string' ? Str::uuid()->getHex() : Str::uuid())->toString());
         }
 
         return parent::performInsert($query);
@@ -120,7 +118,7 @@ class Model extends BaseModel
      *
      * @param string|null $performer
      */
-    protected function performerAsPlain(string $performer = 'By System')
+    protected function performerAsPlain(?string $performer = 'By System')
     {
         if (empty($performer)) throw new RelationNotFoundException();
 

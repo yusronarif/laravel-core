@@ -13,15 +13,14 @@
     }
   ],
   "require": {
-    "php": "^7.3|^8.0",
+    "php": "^8.0",
     "ext-json": "*",
-    "illuminate/auth": "^7.0|^8.0",
-    "illuminate/container": "^7.0|^8.0",
-    "illuminate/contracts": "^7.0|^8.0",
-    "illuminate/database": "^7.0|^8.0",
-    "illuminate/support": "^7.0|^8.0",
-    "nesbot/carbon": "^2.0",
-    "ramsey/uuid": "^3.8|^4.0"
+    "illuminate/auth": "^8.0",
+    "illuminate/container": "^8.0",
+    "illuminate/contracts": "^8.0",
+    "illuminate/database": "^8.0",
+    "illuminate/support": "^8.0",
+    "nesbot/carbon": "^2.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^8.0|^9.0"
@@ -31,8 +30,7 @@
       "Yusronarif\\Core\\": "src/"
     },
     "files": [
-      "helpers/helpers.php",
-      "helpers/html_elements.php"
+      "helpers.php"
     ]
   },
   "autoload-dev": {
@@ -52,7 +50,7 @@
     },
     "laravel": {
       "providers": [
-        "Yusronarif\\Core\\Providers\\ServiceProvider"
+        "Yusronarif\\Core\\CoreServiceProvider"
       ],
       "aliases": {}
     }

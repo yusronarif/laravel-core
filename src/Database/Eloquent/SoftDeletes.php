@@ -17,7 +17,7 @@ trait SoftDeletes
     {
         $query = $this->setKeysForSaveQuery($this->newModelQuery());
 
-        if (auth()->check()) {
+        if (auth()->user() && empty($this->performBy)) {
             if ($this->performerMode == 'users')
                 $this->performBy = auth()->user()->id;
             else
@@ -59,7 +59,7 @@ trait SoftDeletes
             return false;
         }
 
-        if (auth()->check()) {
+        if (auth()->user() && empty($this->performBy)) {
             if ($this->performerMode == 'users')
                 $this->performBy = auth()->user()->id;
             else

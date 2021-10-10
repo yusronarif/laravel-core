@@ -17,7 +17,7 @@ trait HasTimestamps
      */
     public function setCreatedAt($value)
     {
-        if (auth()->check()) {
+        if (auth()->user() && empty($this->performBy)) {
             if ($this->performerMode == 'users')
                 $this->performBy = auth()->user()->id;
             else
@@ -39,7 +39,7 @@ trait HasTimestamps
      */
     public function setUpdatedAt($value)
     {
-        if (auth()->check()) {
+        if (auth()->user() && empty($this->performBy)) {
             if ($this->performerMode == 'users')
                 $this->performBy = auth()->user()->id;
             else
