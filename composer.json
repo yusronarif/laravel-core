@@ -15,6 +15,7 @@
   "require": {
     "php": "^8.0",
     "ext-json": "*",
+    "composer-runtime-api": "^2.0",
     "illuminate/auth": "^8.40",
     "illuminate/container": "^8.40",
     "illuminate/contracts": "^8.40",
