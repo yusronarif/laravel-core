@@ -12,12 +12,13 @@ class Blueprint extends BaseBlueprint
     /**
      * @var string  users|plain
      */
-    public $performerMode = 'users';
+    public string $performerMode = 'users';
 
     /**
      * @var string
      */
-    private $tableUser = '';
+    private string $tableUser = '';
+    private string $userKeyType;
 
     /**
      * Create a new schema blueprint.
@@ -32,8 +33,9 @@ class Blueprint extends BaseBlueprint
     {
         parent::__construct($table, $callback, $prefix);
 
-        $userModel = config('yusronarifCore.model.users');
+        $userModel = config('yusronarif.core.model.users');
         $this->tableUser = (new $userModel)->getTable();
+        $this->userKeyType = config('yusronarif.core.model.user_key_type', 'int');
     }
 
     /**
@@ -45,9 +47,11 @@ class Blueprint extends BaseBlueprint
      */
     public function timestamps($precision = 0)
     {
+        $foreignType = in_array($this->userKeyType, ['int', 'integer']) ? 'foreignId' : 'foreignUuid';
+
         $this->timestamp('created_at', $precision)->nullable();
         if ($this->performerMode == 'users') {
-            $this->foreignId('created_by')->nullable()
+            $this->{$foreignType}('created_by')->nullable()
                 ->constrained($this->tableUser)->onUpdate('cascade')->onDelete('restrict');
         } else {
             $this->string('created_by', 100)->nullable();
@@ -55,7 +59,7 @@ class Blueprint extends BaseBlueprint
 
         $this->timestamp('updated_at', $precision)->nullable();
         if ($this->performerMode == 'users') {
-            $this->foreignId('updated_by')->nullable()
+            $this->{$foreignType}('updated_by')->nullable()
                 ->constrained($this->tableUser)->onUpdate('cascade')->onDelete('restrict');
         } else {
             $this->string('updated_by', 100)->nullable();
@@ -72,9 +76,11 @@ class Blueprint extends BaseBlueprint
      */
     public function softDeletes($column = 'deleted_at', $precision = 0)
     {
+        $foreignType = in_array($this->userKeyType, ['int', 'integer']) ? 'foreignId' : 'foreignUuid';
+
         $this->timestamp($column, $precision)->nullable();
         if ($this->performerMode == 'users') {
-            $this->foreignId('deleted_by')->nullable()
+            $this->{$foreignType}('deleted_by')->nullable()
                 ->constrained($this->tableUser)->onUpdate('cascade')->onDelete('restrict');
         } else {
             $this->string('deleted_by', 100)->nullable();
@@ -82,7 +88,7 @@ class Blueprint extends BaseBlueprint
 
         $this->timestamp('restore_at', $precision)->nullable();
         if ($this->performerMode == 'users') {
-            $this->foreignId('restore_by')->nullable()
+            $this->{$foreignType}('restore_by')->nullable()
                 ->constrained($this->tableUser)->onUpdate('cascade')->onDelete('restrict');
         } else {
             $this->string('restore_by', 100)->nullable();
