@@ -2,8 +2,8 @@
 
 namespace Yusronarif\Core\Database\Query;
 
-use Illuminate\Database\Query\Builder as ParentBuilder;
+use Illuminate\Database\Query\Builder as BaseBuilder;
 
-class Builder extends ParentBuilder
+class Builder extends BaseBuilder
 {
 }

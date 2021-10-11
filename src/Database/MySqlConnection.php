@@ -2,11 +2,11 @@
 
 namespace Yusronarif\Core\Database;
 
-use Illuminate\Database\MySqlConnection as ParentConnection;
-//use Illuminate\Database\Schema\MySqlBuilder as ParentBuilder;
+use Illuminate\Database\MySqlConnection as BaseConnection;
+//use Illuminate\Database\Schema\MySqlBuilder as BaseBuilder;
 use Yusronarif\Core\Database\Schema\Blueprint;
 
-class MySqlConnection extends ParentConnection
+class MySqlConnection extends BaseConnection
 {
     public function getSchemaBuilder()
     {

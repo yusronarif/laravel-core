@@ -17,12 +17,15 @@ trait HasTimestamps
      */
     public function setCreatedAt($value)
     {
-        if (auth()->check()) {
-            $this->unknownPerformer = auth()->user()->name;
+        if (auth()->user() && empty($this->performBy)) {
+            if ($this->performerMode == 'users')
+                $this->performBy = auth()->user()->id;
+            else
+                $this->performBy = auth()->user()->name ?? auth()->user()->username ?? auth()->user()->email ?? auth()->user()->id;
         }
 
-        $this->{static::CREATED_AT} = $value;
-        $this->{static::CREATED_BY} = $this->unknownPerformer;
+        $this->{$this->getCreatedAtColumn()} = $value;
+        $this->{$this->getCreatedByColumn()} = $this->performBy;
 
         return $this;
     }
@@ -36,12 +39,15 @@ trait HasTimestamps
      */
     public function setUpdatedAt($value)
     {
-        if (auth()->check()) {
-            $this->unknownPerformer = auth()->user()->name;
+        if (auth()->user() && empty($this->performBy)) {
+            if ($this->performerMode == 'users')
+                $this->performBy = auth()->user()->id;
+            else
+                $this->performBy = auth()->user()->name ?? auth()->user()->username ?? auth()->user()->email ?? auth()->user()->id;
         }
 
-        $this->{static::UPDATED_AT} = $value;
-        $this->{static::UPDATED_BY} = $this->unknownPerformer;
+        $this->{$this->getUpdatedAtColumn()} = $value;
+        $this->{$this->getUpdatedByColumn()} = $this->performBy;
 
         return $this;
     }
@@ -53,7 +59,7 @@ trait HasTimestamps
      */
     public function getCreatedByColumn()
     {
-        return static::CREATED_BY;
+        return defined('static::CREATED_BY') ? static::CREATED_BY : 'created_by';
     }
 
     /**
@@ -63,6 +69,22 @@ trait HasTimestamps
      */
     public function getUpdatedByColumn()
     {
-        return static::UPDATED_BY;
+        return defined('static::UPDATED_BY') ? static::UPDATED_BY : 'updated_by';
+    }
+
+    public function creater()
+    {
+        if ($this->performerMode == 'users')
+            return $this->belongsTo(config('yusronarifCore.model.users'), $this->getCreatedByColumn());
+        else
+            return $this->performerAsPlain($this->getCreatedByColumn());
+    }
+
+    public function updater()
+    {
+        if ($this->performerMode == 'users')
+            return $this->belongsTo(config('yusronarifCore.model.users'), $this->getUpdatedByColumn());
+        else
+            return $this->performerAsPlain($this->getUpdatedByColumn());
     }
 }

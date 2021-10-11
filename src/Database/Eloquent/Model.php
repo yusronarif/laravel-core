@@ -2,12 +2,13 @@
 
 namespace Yusronarif\Core\Database\Eloquent;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model as BaseModel;
+use Illuminate\Database\Eloquent\RelationNotFoundException;
 use Illuminate\Support\Facades\DB;
-use Ramsey\Uuid\Uuid;
-use Yusronarif\Core\Database\Eloquent\Builder;
 use Yusronarif\Core\Database\Eloquent\Concerns\HasTimestamps;
 use Yusronarif\Core\Database\Eloquent\Scopes\GeneralScope;
+use Yusronarif\Core\Support\Str;
 
 class Model extends BaseModel
 {
@@ -16,28 +17,17 @@ class Model extends BaseModel
     /*
      * The list of table wich include with schema
      */
-    protected $fullnameTable = [];
+    protected string|array $fullnameTable = [];
 
     /**
-     * The name of the "created at" column.
-     *
-     * @var string
+     * @var string  users|plain
      */
-    const CREATED_BY = 'created_by';
+    protected string $performerMode = 'users';
 
     /**
-     * The name of the "updated at" column.
-     *
-     * @var string
+     * Who is (user) as executor
      */
-    const UPDATED_BY = 'updated_by';
-
-    /**
-     * The unknown user executor
-     *
-     * @var string
-     */
-    protected $unknownPerformer = 'By System';
+    protected $performBy = null;
 
     /**
      * Create a new Eloquent model instance.
@@ -70,14 +60,14 @@ class Model extends BaseModel
     /**
      * Perform a model insert operation.
      *
-     * @param  \Yusronarif\Core\Database\Eloquent\Builder  $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @return bool
      */
     protected function performInsert(Builder $query)
     {
-        if (in_array(strtolower($this->getKeyType()), ['string', 'uuid'])) {
+        if (in_array($keyType = strtolower($this->getKeyType()), ['string', 'uuid'])) {
             $this->setIncrementing(false);
-            $this->setAttribute($this->getKeyName(), (string) Uuid::uuid4()->getHex());
+            $this->setAttribute($this->getKeyName(), ($keyType=='string' ? Str::uuid()->getHex() : Str::uuid())->toString());
         }
 
         return parent::performInsert($query);
@@ -86,9 +76,9 @@ class Model extends BaseModel
     /**
      * Set the keys for a save update query.
      *
-     * @param \Yusronarif\Core\Database\Eloquent\Builder $query
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
      *
-     * @return \Yusronarif\Core\Database\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     /*protected function setKeysForSaveQuery(Builder $query)
     {
@@ -121,4 +111,17 @@ class Model extends BaseModel
 
         return $this->getAttribute($keyName);
     }*/
+
+
+    /**
+     * generate performer from plain performer
+     *
+     * @param string|null $performer
+     */
+    protected function performerAsPlain(?string $performer = 'By System')
+    {
+        if (empty($performer)) throw new RelationNotFoundException();
+
+        return DB::select(DB::raw("SELECT null AS id, '{$performer}' AS name, '{$performer}' AS username, '{$performer}' AS email"));
+    }
 }

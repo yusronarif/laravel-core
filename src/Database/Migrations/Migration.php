@@ -69,7 +69,7 @@ class Migration extends BaseMigration
                     $pkey = "{$prefix}_{$key}_foreign";
                     if (!in_array($pkey, $fkeys)) {
                         $table->foreign($key)->references($vals['reference'])->on($tbl)
-                            ->onUpdate($vals['onUpdate'] ?: 'cascade')->onDelete($vals['onDelete'] ?: 'cascade');
+                            ->onUpdate($vals['onUpdate'] ?: 'cascade')->onDelete($vals['onDelete'] ?: 'restrict');
                     }
                 }
             }
