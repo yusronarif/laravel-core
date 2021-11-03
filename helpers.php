@@ -340,7 +340,7 @@ if (!function_exists('hasRoute')) {
      */
     function hasRoute(string $name): bool
     {
-        return app('route')->has($name);
+        return app('router')->has($name);
     }
 }
 
@@ -357,7 +357,7 @@ if (!function_exists('routed')) {
      */
     function routed(string $name, array $parameters = [], bool $absolute = true): string
     {
-        if (app('route')->has($name)) {
+        if (app('router')->has($name)) {
             return app('url')->route($name, $parameters, $absolute);
         }
 
