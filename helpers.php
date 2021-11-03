@@ -365,6 +365,36 @@ if (!function_exists('routed')) {
     }
 }
 
+if (!function_exists('activeRoute')) {
+    function activeRoute(string $route = '', array $params = [], string $cssClass = 'active current'): string
+    {
+        if (empty($route = trim($route))) return '';
+
+        $requestRoute = request()->route();
+
+        if (empty($params)) {
+            return Str::startsWith($requestRoute->getName(), $route) ? $cssClass : '';
+        }
+
+        if (Str::startsWith($requestRoute->getName(), $route)) {
+            foreach ($params as $key => $value) {
+                if (
+                    $requestRoute->parameter($key) instanceof \Illuminate\Database\Eloquent\Model
+                    && $value instanceof \Illuminate\Database\Eloquent\Model
+                    && $requestRoute->parameter($key)->id != $value->id
+                ) {
+                    return '';
+                }
+                if ($requestRoute->parameter($key) != $value) {
+                    return '';
+                }
+            }
+            return $cssClass;
+        }
+        return '';
+    }
+}
+
 if (!function_exists('currencyFormat')) {
     function currencyFormat(string $format, int|float $number): string
     {
