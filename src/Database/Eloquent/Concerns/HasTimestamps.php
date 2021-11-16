@@ -11,17 +11,17 @@ trait HasTimestamps
     /**
      * Set the value of the "created at" attribute.
      *
-     * @param mixed $value
-     *
+     * @param  mixed  $value
      * @return $this
      */
     public function setCreatedAt($value)
     {
         if (auth()->user() && empty($this->performBy)) {
-            if ($this->performerMode == 'users')
+            if ($this->performerMode == 'users') {
                 $this->performBy = auth()->user()->id;
-            else
+            } else {
                 $this->performBy = auth()->user()->name ?? auth()->user()->username ?? auth()->user()->email ?? auth()->user()->id;
+            }
         }
 
         $this->{$this->getCreatedAtColumn()} = $value;
@@ -33,17 +33,17 @@ trait HasTimestamps
     /**
      * Set the value of the "updated at" attribute.
      *
-     * @param mixed $value
-     *
+     * @param  mixed  $value
      * @return $this
      */
     public function setUpdatedAt($value)
     {
         if (auth()->user() && empty($this->performBy)) {
-            if ($this->performerMode == 'users')
+            if ($this->performerMode == 'users') {
                 $this->performBy = auth()->user()->id;
-            else
+            } else {
                 $this->performBy = auth()->user()->name ?? auth()->user()->username ?? auth()->user()->email ?? auth()->user()->id;
+            }
         }
 
         $this->{$this->getUpdatedAtColumn()} = $value;
@@ -74,17 +74,19 @@ trait HasTimestamps
 
     public function creater()
     {
-        if ($this->performerMode == 'users')
+        if ($this->performerMode == 'users') {
             return $this->belongsTo(config('yusronarifCore.model.users'), $this->getCreatedByColumn());
-        else
+        } else {
             return $this->performerAsPlain($this->getCreatedByColumn());
+        }
     }
 
     public function updater()
     {
-        if ($this->performerMode == 'users')
+        if ($this->performerMode == 'users') {
             return $this->belongsTo(config('yusronarifCore.model.users'), $this->getUpdatedByColumn());
-        else
+        } else {
             return $this->performerAsPlain($this->getUpdatedByColumn());
+        }
     }
 }

@@ -38,8 +38,7 @@ class BladeServiceProvider extends ServiceProvider
     /**
      * Get argument array from argument string.
      *
-     * @param string $argumentString
-     *
+     * @param  string  $argumentString
      * @return array
      */
     private function getArguments($argumentString, $limit = PHP_INT_MAX)

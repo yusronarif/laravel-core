@@ -1,24 +1,40 @@
 <?php
 
-if(! defined('SPACER')) define('SPACER', '&nbsp;&nbsp;&nbsp;&nbsp;');
-if(! defined('SPACER_TIGHT')) define('SPACER_TIGHT', '&nbsp;&nbsp;');
-if(! defined('SPACER_WIDE')) define('SPACER_WIDE', '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
+if (! defined('SPACER')) {
+    define('SPACER', '&nbsp;&nbsp;&nbsp;&nbsp;');
+}
+if (! defined('SPACER_TIGHT')) {
+    define('SPACER_TIGHT', '&nbsp;&nbsp;');
+}
+if (! defined('SPACER_WIDE')) {
+    define('SPACER_WIDE', '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;');
+}
 
 // date format
-if(! defined('DATE_SHORT')) define('DATE_SHORT', "L");
-if(! defined('DATE_MEDIUM')) define('DATE_MEDIUM', "ll");
-if(! defined('DATE_LONG')) define('DATE_LONG', "LL");
-if(! defined('DATE_FULL')) define('DATE_FULL', "LLL");
-if(! defined('DATE_FULL_SHORT')) define('DATE_FULL_SHORT', "lll");
+if (! defined('DATE_SHORT')) {
+    define('DATE_SHORT', 'L');
+}
+if (! defined('DATE_MEDIUM')) {
+    define('DATE_MEDIUM', 'll');
+}
+if (! defined('DATE_LONG')) {
+    define('DATE_LONG', 'LL');
+}
+if (! defined('DATE_FULL')) {
+    define('DATE_FULL', 'LLL');
+}
+if (! defined('DATE_FULL_SHORT')) {
+    define('DATE_FULL_SHORT', 'lll');
+}
 
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
 use Illuminate\View\View;
 use Yusronarif\Core\Support\Str;
 
-if (!function_exists('f')) {
+if (! function_exists('f')) {
     /**
-     * @param string $text
+     * @param  string  $text
      * @return string
      */
     function f(string $text = ''): string
@@ -27,12 +43,12 @@ if (!function_exists('f')) {
     }
 }
 
-if (!function_exists('prettySize')) {
+if (! function_exists('prettySize')) {
     /**
      * Human readable file size.
      *
-     * @param int $bytes
-     * @param int $decimals
+     * @param  int  $bytes
+     * @param  int  $decimals
      * @return string
      */
     function prettySize(int $bytes, int $decimals = 2): string
@@ -46,10 +62,10 @@ if (!function_exists('prettySize')) {
 
 if (! function_exists('setDefaultRequest')) {
     /**
-     * Set Default Value for Request Input
+     * Set Default Value for Request Input.
      *
-     * @param string|array $name
-     * @param null $value
+     * @param  string|array  $name
+     * @param  null  $value
      */
     function setDefaultRequest(string|array $name, mixed $value = null): void
     {
@@ -57,30 +73,31 @@ if (! function_exists('setDefaultRequest')) {
 
         if (is_array($name)) {
             foreach ($name as $key => $val) {
-                if (!empty($key) && !empty($val)) {
+                if (! empty($key) && ! empty($val)) {
                     setDefaultRequest($key, $val);
                 }
             }
-        }
-        else {
-            if (!$request->session()->hasOldInput($name)) {
-                $request->session()->flash('_old_input.' . $name, $value);
+        } else {
+            if (! $request->session()->hasOldInput($name)) {
+                $request->session()->flash('_old_input.'.$name, $value);
             }
 
             if (strpos($name, '.', 1) > 0) {
                 $names = [];
                 Arr::set($names, $name, $value);
                 $request->request->set(key($names), Arr::first($names));
-            } else $request->request->set($name, $value);
+            } else {
+                $request->request->set($name, $value);
+            }
         }
     }
 }
 
-if (!function_exists('fromResource')) {
+if (! function_exists('fromResource')) {
     /**
      * Generate an collection from resource.
      *
-     * @param \Illuminate\Http\Resources\Json\JsonResource $resource
+     * @param  \Illuminate\Http\Resources\Json\JsonResource  $resource
      * @return mixed
      */
     function fromResource(\Illuminate\Http\Resources\Json\JsonResource $resource): mixed
@@ -89,11 +106,11 @@ if (!function_exists('fromResource')) {
     }
 }
 
-if (!function_exists('vendor')) {
+if (! function_exists('vendor')) {
     /**
      * Generate an asset path for the application.
      *
-     * @param string $path
+     * @param  string  $path
      * @return string
      */
     function vendor(string $path): string
@@ -125,44 +142,45 @@ if (!function_exists('vendor')) {
     }
 }
 
-if (!function_exists('document')) {
+if (! function_exists('document')) {
     /**
      * Generate an asset path for the application.
-     * @param string $path
+     *
+     * @param  string  $path
      * @return string
      */
     function document(string $path): string
     {
-        return config('app.document_url', asset('files')) ."/{$path}";
+        return config('app.document_url', asset('files'))."/{$path}";
     }
 }
 
-if (!function_exists('plugins')) {
+if (! function_exists('plugins')) {
     /**
      * Retrive Application Plugins.
      * retriving from config's definitions.
      *
-     * @param string $name
-     * @param string $base
-     * @param array|null $type
+     * @param  string  $name
+     * @param  string  $base
+     * @param  array|null  $type
      * @return void
      */
     function plugins(string $name, string $base = 'vendor', array $type = null): void
     {
-        if (!$name) {
+        if (! $name) {
             return;
         }
-        if (!in_array($base, ['vendor', 'local'])) {
+        if (! in_array($base, ['vendor', 'local'])) {
             return;
         }
 
-        if (!is_array($name)) {
+        if (! is_array($name)) {
             $name = [$name];
         }
-        if (!$type) {
+        if (! $type) {
             $type = ['css', 'js'];
         }
-        if (!is_array($type)) {
+        if (! is_array($type)) {
             $type = [$type];
         }
         sort($type);
@@ -192,21 +210,20 @@ if (!function_exists('plugins')) {
     }
 }
 
-if (!function_exists('pluginAssets')) {
+if (! function_exists('pluginAssets')) {
     /**
      * Retrive Application Plugins's Assets.
      * retriving from config's definitions.
      *
-     * @param string    $names
-     * @param string    $base
-     * @param ?string   $type
-     * @param string    $parent
-     *
+     * @param  string  $names
+     * @param  string  $base
+     * @param  ?string  $type
+     * @param  string  $parent
      * @return array
      */
     function pluginAssets(string $names, string $base = 'vendor', ?string $type = null, string $parent = ''): array
     {
-        if (!is_array($names)) {
+        if (! is_array($names)) {
             $names = [$names];
         }
 
@@ -277,32 +294,30 @@ if (!function_exists('pluginAssets')) {
     }
 }
 
-if (!function_exists('carbon')) {
+if (! function_exists('carbon')) {
     /**
      * Carbon helper.
      *
-     * @param string|DateTimeInterface|null $datetime
-     * @param DateTimeZone|string|null      $tz
-     *
+     * @param  string|DateTimeInterface|null  $datetime
+     * @param  DateTimeZone|string|null  $tz
      * @return Carbon|null
      */
     function carbon(DateTimeInterface|string|null $datetime = null, DateTimeZone|string|null $tz = 'Asia/Jakarta'): ?Carbon
     {
         try {
-            return !$datetime ? Carbon::now($tz) : Carbon::parse($datetime, $tz);
+            return ! $datetime ? Carbon::now($tz) : Carbon::parse($datetime, $tz);
         } catch (\Exception $e) {
             return carbon($datetime, 'Asia/Jakarta');
         }
     }
 }
 
-if (!function_exists('is_dev')) {
+if (! function_exists('is_dev')) {
     /**
      * Development Mode Checker.
      *
-     * @param string $is_true
-     * @param string $is_false
-     *
+     * @param  string  $is_true
+     * @param  string  $is_false
      * @return bool|\Illuminate\Session\SessionManager|\Illuminate\Session\Store|mixed|string
      */
     function is_dev(string $is_true = '', string $is_false = '')
@@ -330,12 +345,11 @@ if (!function_exists('is_dev')) {
     }
 }
 
-if (!function_exists('hasRoute')) {
+if (! function_exists('hasRoute')) {
     /**
      * Existing Route by Name.
      *
-     * @param string    $name
-     *
+     * @param  string  $name
      * @return bool
      */
     function hasRoute(string $name): bool
@@ -344,15 +358,14 @@ if (!function_exists('hasRoute')) {
     }
 }
 
-if (!function_exists('routed')) {
+if (! function_exists('routed')) {
     /**
      * Existing Route by Name
      * with '#' fallback.
      *
-     * @param string    $name
-     * @param array     $parameters
-     * @param bool      $absolute
-     *
+     * @param  string  $name
+     * @param  array  $parameters
+     * @param  bool  $absolute
      * @return string
      */
     function routed(string $name, array $parameters = [], bool $absolute = true): string
@@ -365,10 +378,12 @@ if (!function_exists('routed')) {
     }
 }
 
-if (!function_exists('activeRoute')) {
+if (! function_exists('activeRoute')) {
     function activeRoute(string $route = '', array $params = [], string $cssClass = 'active current'): string
     {
-        if (empty($route = trim($route))) return '';
+        if (empty($route = trim($route))) {
+            return '';
+        }
 
         $requestRoute = request()->route();
 
@@ -389,16 +404,18 @@ if (!function_exists('activeRoute')) {
                     return '';
                 }
             }
+
             return $cssClass;
         }
+
         return '';
     }
 }
 
-if (!function_exists('currencyFormat')) {
+if (! function_exists('currencyFormat')) {
     function currencyFormat(string $format, int|float $number): string
     {
-        $regex = '/%((?:[\^!\-]|\+|\(|\=.)*)([0-9]+)?' .
+        $regex = '/%((?:[\^!\-]|\+|\(|\=.)*)([0-9]+)?'.
             '(?:#([0-9]+))?(?:\.([0-9]+))?([in%])/';
         if (setlocale(LC_MONETARY, 0) == 'C') {
             setlocale(LC_MONETARY, '');
@@ -407,18 +424,18 @@ if (!function_exists('currencyFormat')) {
         preg_match_all($regex, $format, $matches, PREG_SET_ORDER);
         foreach ($matches as $fmatch) {
             $value = floatval($number);
-            $flags = array(
+            $flags = [
                 'fillchar' => preg_match('/\=(.)/', $fmatch[1], $match) ?
                     $match[1] : ' ',
                 'nogroup' => preg_match('/\^/', $fmatch[1]) > 0,
                 'usesignal' => preg_match('/\+|\(/', $fmatch[1], $match) ?
                     $match[0] : '+',
                 'nosimbol' => preg_match('/\!/', $fmatch[1]) > 0,
-                'isleft' => preg_match('/\-/', $fmatch[1]) > 0
-            );
-            $width = trim($fmatch[2]) ? (int)$fmatch[2] : 0;
-            $left = trim($fmatch[3]) ? (int)$fmatch[3] : 0;
-            $right = trim($fmatch[4]) ? (int)$fmatch[4] : 0;
+                'isleft' => preg_match('/\-/', $fmatch[1]) > 0,
+            ];
+            $width = trim($fmatch[2]) ? (int) $fmatch[2] : 0;
+            $left = trim($fmatch[3]) ? (int) $fmatch[3] : 0;
+            $right = trim($fmatch[4]) ? (int) $fmatch[4] : 0;
             $conversion = $fmatch[5];
 
             $positive = true;
@@ -450,14 +467,14 @@ if (!function_exists('currencyFormat')) {
                     $suffix = ')';
                     break;
             }
-            if (!$flags['nosimbol']) {
-                $currency = $cprefix .
-                    ($conversion == 'i' ? $locale['int_curr_symbol'] : $locale['currency_symbol']) .
+            if (! $flags['nosimbol']) {
+                $currency = $cprefix.
+                    ($conversion == 'i' ? $locale['int_curr_symbol'] : $locale['currency_symbol']).
                     $csuffix;
             } else {
                 $currency = '';
             }
-            $space = $locale["{$letter}_sep_by_space"] ? Chr(32) : '';
+            $space = $locale["{$letter}_sep_by_space"] ? chr(32) : '';
 
             $value = number_format(
                 $value,
@@ -469,13 +486,13 @@ if (!function_exists('currencyFormat')) {
 
             $n = strlen($prefix) + strlen($currency) + strlen($value[0]);
             if ($left > 0 && $left > $n) {
-                $value[0] = str_repeat($flags['fillchar'], $left - $n) . $value[0];
+                $value[0] = str_repeat($flags['fillchar'], $left - $n).$value[0];
             }
             $value = implode($locale['mon_decimal_point'], $value);
             if ($locale["{$letter}_cs_precedes"]) {
-                $value = $prefix . $currency . $space . $value . $suffix;
+                $value = $prefix.$currency.$space.$value.$suffix;
             } else {
-                $value = $prefix . $value . $space . $currency . $suffix;
+                $value = $prefix.$value.$space.$currency.$suffix;
             }
             if ($width > 0) {
                 $value = str_pad(
@@ -494,9 +511,9 @@ if (!function_exists('currencyFormat')) {
     }
 }
 
-if (!function_exists('getRawSql')) {
+if (! function_exists('getRawSql')) {
     /**
-     * @param \Illuminate\Database\Query\Builder|\Yusronarif\Core\Database\Query\Builder $query
+     * @param  \Illuminate\Database\Query\Builder|\Yusronarif\Core\Database\Query\Builder  $query
      * @return string
      */
     function getRawSql(\Illuminate\Database\Query\Builder|\Yusronarif\Core\Database\Query\Builder $query): string

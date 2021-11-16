@@ -14,7 +14,7 @@ use Illuminate\View\View;
 class Controller extends BaseController
 {
     /**
-     * Authenticated User
+     * Authenticated User.
      */
     protected Request $request;
 
@@ -48,18 +48,18 @@ class Controller extends BaseController
     private array $reservedVariables = ['activeMenu', 'activeMenuPack', 'pageTitle', 'pageMeta'];
 
     /**
-     * Prefix View Path
+     * Prefix View Path.
      */
     protected string $prefixView = '';
     protected string $viewPath = '';
 
     /**
-     * type of crud form
+     * type of crud form.
      */
     protected string $crudType = '';
 
     /**
-     * main route name
+     * main route name.
      */
     protected string $route = '';
 
@@ -75,16 +75,16 @@ class Controller extends BaseController
     /**
      * Serve blade template.
      *
-     * @param string $view
-     *
+     * @param  string  $view
      * @return View
      */
     protected function view(string $view): View
     {
         $this->share();
 
-        if ($this->prefixView)
-            $view = preg_replace('/(\.)+$/i', '', $this->prefixView) . '.' . $view;
+        if ($this->prefixView) {
+            $view = preg_replace('/(\.)+$/i', '', $this->prefixView).'.'.$view;
+        }
 
         return view($view, $this->controllerData);
     }
@@ -100,21 +100,20 @@ class Controller extends BaseController
         $this->controllerData['activeUser'] = auth()->user();
 
         $this->controllerData['crudType'] = $this->crudType;
-        $this->controllerData['viewPath'] = ($this->viewPath ?: $this->prefixView) . '.';
+        $this->controllerData['viewPath'] = ($this->viewPath ?: $this->prefixView).'.';
         $this->controllerData['route'] = $this->route;
     }
 
     /**
-     * Set Default Value for Request Input
+     * Set Default Value for Request Input.
      *
-     * @param string|array $name
-     * @param mixed $value
-     *
+     * @param  string|array  $name
+     * @param  mixed  $value
      * @return void
      */
     protected function setDefault(string|array $name, mixed $value = null): void
     {
-        if (!$this->request->input()) {
+        if (! $this->request->input()) {
             setDefaultRequest($name, $value);
         }
     }
@@ -122,9 +121,8 @@ class Controller extends BaseController
     /**
      * Set controller data.
      *
-     * @param string $name
-     * @param mixed  $value
-     *
+     * @param  string  $name
+     * @param  mixed  $value
      * @return void
      *
      * @throws \Exception
@@ -140,9 +138,8 @@ class Controller extends BaseController
     /**
      * Set page meta.
      *
-     * @param string $key
-     * @param mixed  $value
-     *
+     * @param  string  $key
+     * @param  mixed  $value
      * @return void
      */
     protected function setPageMeta(string $key, mixed $value): void
@@ -153,8 +150,7 @@ class Controller extends BaseController
     /**
      * Set Page title.
      *
-     * @param string $title
-     *
+     * @param  string  $title
      * @return void
      */
     protected function setPageTitle(string $title): void
@@ -165,7 +161,7 @@ class Controller extends BaseController
     /**
      * Set Active Menu.
      *
-     * @param string|array  $menu
+     * @param  string|array  $menu
      * @return void
      */
     protected function setActiveMenu(string|array $menu): void
@@ -176,7 +172,7 @@ class Controller extends BaseController
     /**
      * Add Active Menu.
      *
-     * @param string|array  $menu
+     * @param  string|array  $menu
      * @return void
      */
     protected function addActiveMenu(string|array $menu): void
