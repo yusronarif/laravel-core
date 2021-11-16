@@ -18,10 +18,11 @@ trait SoftDeletes
         $query = $this->setKeysForSaveQuery($this->newModelQuery());
 
         if (auth()->user() && empty($this->performBy)) {
-            if ($this->performerMode == 'users')
+            if ($this->performerMode == 'users') {
                 $this->performBy = auth()->user()->id;
-            else
+            } else {
                 $this->performBy = auth()->user()->name ?? auth()->user()->username ?? auth()->user()->email ?? auth()->user()->id;
+            }
         }
 
         $time = $this->freshTimestamp();
@@ -34,7 +35,7 @@ trait SoftDeletes
         $this->{$this->getDeletedAtColumn()} = $time;
         $this->{$this->getDeletedByColumn()} = $this->performBy;
 
-        if ($this->timestamps && !is_null($this->getUpdatedAtColumn())) {
+        if ($this->timestamps && ! is_null($this->getUpdatedAtColumn())) {
             $this->{$this->getUpdatedAtColumn()} = $time;
             $this->{$this->getUpdatedByColumn()} = $this->performBy;
 
@@ -60,10 +61,11 @@ trait SoftDeletes
         }
 
         if (auth()->user() && empty($this->performBy)) {
-            if ($this->performerMode == 'users')
+            if ($this->performerMode == 'users') {
                 $this->performBy = auth()->user()->id;
-            else
+            } else {
                 $this->performBy = auth()->user()->name ?? auth()->user()->username ?? auth()->user()->email ?? auth()->user()->id;
+            }
         }
 
         $this->{$this->getDeletedAtColumn()} = null;
@@ -145,17 +147,19 @@ trait SoftDeletes
 
     public function deleter()
     {
-        if ($this->performerMode == 'users')
+        if ($this->performerMode == 'users') {
             return $this->belongsTo(config('yusronarifCore.model.users'), $this->getDeletedByColumn());
-        else
+        } else {
             return $this->performerAsPlain($this->getDeletedByColumn());
+        }
     }
 
     public function restorer()
     {
-        if ($this->performerMode == 'users')
+        if ($this->performerMode == 'users') {
             return $this->belongsTo(config('yusronarifCore.model.users'), $this->getRestoreByColumn());
-        else
+        } else {
             return $this->performerAsPlain($this->getRestoreByColumn());
+        }
     }
 }

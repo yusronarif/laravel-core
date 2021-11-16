@@ -12,16 +12,15 @@ class Migration extends BaseMigration
     protected $table;
 
     /**
-     * @param Blueprint $table
+     * @param  Blueprint  $table
      * @param $fields
-     *
      * @return bool|Blueprint
      */
     protected function setFields(Blueprint $table, $fields)
     {
         if (is_array($fields) && count($fields) > 0) {
             foreach ($fields as $field => $attr) {
-                if (!Schema::connection($this->connection)->hasColumn($this->table, $field)) {
+                if (! Schema::connection($this->connection)->hasColumn($this->table, $field)) {
                     $type = $attr['type'] ?: 'string';
                     $type = preg_replace('/:+/i', ',', $type);
 
@@ -42,9 +41,8 @@ class Migration extends BaseMigration
     }
 
     /**
-     * @param Blueprint $table
-     * @param array     $foreigns
-     *
+     * @param  Blueprint  $table
+     * @param  array  $foreigns
      * @return bool|Blueprint
      */
     protected function setForeigns(Blueprint $table, $foreigns = [])
@@ -60,14 +58,14 @@ class Migration extends BaseMigration
 
             foreach ($foreigns as $tbl => $tblAttr) {
                 foreach ($tblAttr as $key => $ref) {
-                    if (!is_array($ref)) {
+                    if (! is_array($ref)) {
                         $vals['reference'] = $ref;
                     } else {
                         $vals = $ref;
                     }
 
                     $pkey = "{$prefix}_{$key}_foreign";
-                    if (!in_array($pkey, $fkeys)) {
+                    if (! in_array($pkey, $fkeys)) {
                         $table->foreign($key)->references($vals['reference'])->on($tbl)
                             ->onUpdate($vals['onUpdate'] ?: 'cascade')->onDelete($vals['onDelete'] ?: 'restrict');
                     }

@@ -15,7 +15,7 @@ class CoreServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $configPath = __DIR__ . '/../config/yusronarif/core.php';
+        $configPath = __DIR__.'/../config/yusronarif/core.php';
         $this->mergeConfigFrom($configPath, 'yusronarif.core');
 
         $this->app->register(DbServiceProvider::class, true);
@@ -29,7 +29,7 @@ class CoreServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $configPath = __DIR__ . '/../config/yusronarif/core.php';
+        $configPath = __DIR__.'/../config/yusronarif/core.php';
         $this->publishes([$configPath => config_path('yusronarif/core.php')], 'config');
     }
 }

@@ -20,12 +20,12 @@ class Model extends BaseModel
     protected string|array $fullnameTable = [];
 
     /**
-     * @var string  users|plain
+     * @var string users|plain
      */
     protected string $performerMode = 'users';
 
     /**
-     * Who is (user) as executor
+     * Who is (user) as executor.
      */
     protected $performBy = null;
 
@@ -42,8 +42,7 @@ class Model extends BaseModel
     /**
      * Create a new Eloquent model instance.
      *
-     * @param array $attributes
-     *
+     * @param  array  $attributes
      * @return void
      */
     public function __construct(array $attributes = [])
@@ -64,6 +63,7 @@ class Model extends BaseModel
         if (in_array(strtolower($this->getKeyType()), ['string', 'uuid'])) {
             return false;
         }
+
         return $this->incrementing;
     }
 
@@ -77,7 +77,7 @@ class Model extends BaseModel
     {
         if (in_array($keyType = strtolower($this->getKeyType()), ['string', 'uuid'])) {
             $this->setIncrementing(false);
-            $this->setAttribute($this->getKeyName(), ($keyType=='string' ? Str::uuid()->getHex() : Str::uuid())->toString());
+            $this->setAttribute($this->getKeyName(), ($keyType == 'string' ? Str::uuid()->getHex() : Str::uuid())->toString());
         }
 
         return parent::performInsert($query);
@@ -87,7 +87,6 @@ class Model extends BaseModel
      * Set the keys for a save update query.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
-     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     /*protected function setKeysForSaveQuery(Builder $query)
@@ -122,15 +121,16 @@ class Model extends BaseModel
         return $this->getAttribute($keyName);
     }*/
 
-
     /**
-     * generate performer from plain performer
+     * generate performer from plain performer.
      *
-     * @param string|null $performer
+     * @param  string|null  $performer
      */
     protected function performerAsPlain(?string $performer = 'By System')
     {
-        if (empty($performer)) throw new RelationNotFoundException();
+        if (empty($performer)) {
+            throw new RelationNotFoundException();
+        }
 
         return DB::select(DB::raw("SELECT null AS id, '{$performer}' AS name, '{$performer}' AS username, '{$performer}' AS email"));
     }

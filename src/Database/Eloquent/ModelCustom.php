@@ -34,7 +34,7 @@ trait ModelCustom
 
     protected function setPrimaryValue()
     {
-        if (!$this->exists) {
+        if (! $this->exists) {
             $this->attributes[$this->primaryKey] = $this->getPrimaryValue();
         }
     }
