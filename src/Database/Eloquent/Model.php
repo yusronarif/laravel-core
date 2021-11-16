@@ -30,6 +30,16 @@ class Model extends BaseModel
     protected $performBy = null;
 
     /**
+     * The attributes that should be hidden for arrays.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'created_at', 'updated_at', 'deleted_at', 'restore_at',
+        'created_by', 'updated_by', 'deleted_by', 'restore_by',
+    ];
+
+    /**
      * Create a new Eloquent model instance.
      *
      * @param array $attributes
