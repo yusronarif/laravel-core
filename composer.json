@@ -16,11 +16,11 @@
     "php": "^8.0",
     "ext-json": "*",
     "composer-runtime-api": "^2.0",
-    "illuminate/auth": "^8.40",
-    "illuminate/container": "^8.40",
-    "illuminate/contracts": "^8.40",
-    "illuminate/database": "^8.40",
-    "illuminate/support": "^8.40",
+    "illuminate/auth": "^8.40|^9.0",
+    "illuminate/container": "^8.40|^9.0",
+    "illuminate/contracts": "^8.40|^9.0",
+    "illuminate/database": "^8.40|^9.0",
+    "illuminate/support": "^8.40|^9.0",
     "nesbot/carbon": "^2.0"
   },
   "require-dev": {
