@@ -69,7 +69,7 @@ if (! function_exists('setDefaultRequest')) {
      */
     function setDefaultRequest(string|array $name, mixed $value = null): void
     {
-        $request = request();
+        $request = app('request');
 
         if (is_array($name)) {
             foreach ($name as $key => $val) {
@@ -189,13 +189,13 @@ if (! function_exists('plugins')) {
 
         foreach ($name as $packKey => $packVal) {
             if (is_array($packVal)) {
-                $rs = array_merge_recursive($rs, plugin_assets($packKey, $base, $type));
+                $rs = array_merge_recursive($rs, pluginAssets($packKey, $base, $type));
 
                 foreach ($packVal as $pkey => $pval) {
-                    $rs = array_merge_recursive($rs, plugin_assets($pval, $base, $type, $packKey.'.'.$pkey.'.'));
+                    $rs = array_merge_recursive($rs, pluginAssets($pval, $base, $type, $packKey.'.'.$pkey.'.'));
                 }
             } else {
-                $rs = array_merge_recursive($rs, plugin_assets($packVal, $base, $type));
+                $rs = array_merge_recursive($rs, pluginAssets($packVal, $base, $type));
             }
         }
 
@@ -217,11 +217,11 @@ if (! function_exists('pluginAssets')) {
      *
      * @param  string  $names
      * @param  string  $base
-     * @param  ?string  $type
+     * @param  array  $type
      * @param  string  $parent
      * @return array
      */
-    function pluginAssets(string $names, string $base = 'vendor', ?string $type = null, string $parent = ''): array
+    function pluginAssets(string $names, string $base = 'vendor', array $type = ['css','js'], string $parent = ''): array
     {
         if (! is_array($names)) {
             $names = [$names];
