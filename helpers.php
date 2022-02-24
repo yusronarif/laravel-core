@@ -385,13 +385,13 @@ if (! function_exists('activeRoute')) {
             return '';
         }
 
-        $requestRoute = request()->route();
+        if (request()->routeIs("{$route}*")) {
+            if (empty($params)) {
+                return $cssClass;
+            }
 
-        if (empty($params)) {
-            return Str::startsWith($requestRoute->getName(), $route) ? $cssClass : '';
-        }
+            $requestRoute = request()->route();
 
-        if (Str::startsWith($requestRoute->getName(), $route)) {
             foreach ($params as $key => $value) {
                 if (
                     $requestRoute->parameter($key) instanceof \Illuminate\Database\Eloquent\Model
