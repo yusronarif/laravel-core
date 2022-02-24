@@ -221,7 +221,7 @@ if (! function_exists('pluginAssets')) {
      * @param  string  $parent
      * @return array
      */
-    function pluginAssets(string $names, string $base = 'vendor', array $type = ['css','js'], string $parent = ''): array
+    function pluginAssets(string $names, string $base = 'vendor', array $type = ['css', 'js'], string $parent = ''): array
     {
         if (! is_array($names)) {
             $names = [$names];
