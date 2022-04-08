@@ -28,7 +28,6 @@ if (! defined('DATE_FULL_SHORT')) {
 }
 
 use Carbon\Carbon;
-use Illuminate\Support\Arr;
 use Illuminate\View\View;
 use Yusronarif\Core\Support\Str;
 
@@ -72,24 +71,13 @@ if (! function_exists('setDefaultRequest')) {
         $request = app('request');
 
         if (is_array($name)) {
-            foreach ($name as $key => $val) {
-                if (! empty($key) && ! empty($val)) {
-                    setDefaultRequest($key, $val);
-                }
-            }
+            $data = $name;
         } else {
-            if (! $request->session()->hasOldInput($name)) {
-                $request->session()->flash('_old_input.'.$name, $value);
-            }
-
-            if (strpos($name, '.', 1) > 0) {
-                $names = [];
-                Arr::set($names, $name, $value);
-                $request->request->set(key($names), Arr::first($names));
-            } else {
-                $request->request->set($name, $value);
-            }
+            $data = [$name => $value];
         }
+
+        $request->mergeIfMissing($data);
+        $request->session()->flashInput($data);
     }
 }
 
@@ -307,20 +295,20 @@ if (! function_exists('carbon')) {
         try {
             return ! $datetime ? Carbon::now($tz) : Carbon::parse($datetime, $tz);
         } catch (\Exception $e) {
-            return carbon($datetime, 'Asia/Jakarta');
+            return carbon($datetime, $tz);
         }
     }
 }
 
-if (! function_exists('is_dev')) {
+if (! function_exists('isDev')) {
     /**
      * Development Mode Checker.
      *
-     * @param  string  $is_true
-     * @param  string  $is_false
+     * @param  string  $isTrue
+     * @param  string  $isFalse
      * @return bool|\Illuminate\Session\SessionManager|\Illuminate\Session\Store|mixed|string
      */
-    function is_dev(string $is_true = '', string $is_false = '')
+    function isDev(string $isTrue = '', string $isFalse = '')
     {
         if (session('dev_mode') != null) {
             $return = session('dev_mode');
@@ -333,11 +321,11 @@ if (! function_exists('is_dev')) {
             }
         }
 
-        if ($is_true) {
+        if ($isTrue) {
             if ($return) {
-                return $is_true;
+                return $isTrue;
             } else {
-                return $is_false;
+                return $isFalse;
             }
         }
 
