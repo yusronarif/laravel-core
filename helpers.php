@@ -215,7 +215,7 @@ if (! function_exists('pluginAssets')) {
             $names = [$names];
         }
 
-        $localPath = preg_replace('/\/+$/','', config('yusronarif.plugins.public_path', 'plugins')).'/';
+        $localPath = preg_replace('/\/+$/', '', config('yusronarif.plugins.public_path', 'plugins')).'/';
         $package = config('yusronarif.plugins.config_path', 'yusronarif.plugins').".{$parent}";
         $httpPattern = '/^(http[s?]:)/i';
 
