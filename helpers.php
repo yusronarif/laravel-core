@@ -28,7 +28,7 @@ if (! defined('DATE_FULL_SHORT')) {
 }
 
 use Carbon\Carbon;
-use Illuminate\View\View;
+use Illuminate\Support\Facades\View;
 use Yusronarif\Core\Support\Str;
 
 if (! function_exists('f')) {
@@ -148,29 +148,26 @@ if (! function_exists('plugins')) {
      * Retrive Application Plugins.
      * retriving from config's definitions.
      *
-     * @param  string  $name
+     * @param  string|array  $name
      * @param  string  $base
      * @param  array|null  $type
      * @return void
      */
-    function plugins(string $name, string $base = 'vendor', ?array $type = null): void
+    function plugins(string|array $name, string $base = 'vendor', ?array $type = null): void
     {
-        if (! $name) {
+        if (empty($name)) {
             return;
         }
         if (! in_array($base, ['vendor', 'local'])) {
             return;
         }
 
-        if (! is_array($name)) {
-            $name = [$name];
-        }
-        if (! $type) {
+        $name = (array) $name;
+
+        if (empty($type)) {
             $type = ['css', 'js'];
         }
-        if (! is_array($type)) {
-            $type = [$type];
-        }
+        $type = (array) $type;
         sort($type);
 
         $rs = [];
@@ -211,9 +208,7 @@ if (! function_exists('pluginAssets')) {
      */
     function pluginAssets(string $names, string $base = 'vendor', array $type = ['css', 'js'], string $parent = ''): array
     {
-        if (! is_array($names)) {
-            $names = [$names];
-        }
+        $names = (array) $names;
 
         $localPath = preg_replace('/\/+$/', '', config('yusronarif.plugins.public_path', 'plugins')).'/';
         $package = config('yusronarif.plugins.config_path', 'yusronarif.plugins').".{$parent}";
