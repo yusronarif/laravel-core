@@ -153,7 +153,7 @@ if (! function_exists('plugins')) {
      * @param  array|null  $type
      * @return void
      */
-    function plugins(string $name, string $base = 'vendor', array $type = null): void
+    function plugins(string $name, string $base = 'vendor', ?array $type = null): void
     {
         if (! $name) {
             return;
@@ -215,16 +215,16 @@ if (! function_exists('pluginAssets')) {
             $names = [$names];
         }
 
-        $localPath = 'plugins/';
-        $package = 'arkid.plugins.'.$parent;
+        $localPath = preg_replace('/\/+$/','', config('yusronarif.plugins.public_path', 'plugins')) . '/';
+        $package = config('yusronarif.plugins.config_path', 'yusronarif.plugins') .".{$parent}";
         $httpPattern = '/^(http[s?]:)/i';
 
         $rs = [];
         foreach ($names as $name) {
             foreach ($type as $t) {
                 $rs[$t] = '';
-                if (config()->has($package.$name.'.'.$t)) {
-                    foreach (config($package.$name.'.'.$t) as $file) {
+                if (config()->has("{$package}{$name}.{$t}")) {
+                    foreach (config("{$package}{$name}.{$t}") as $file) {
                         if ($t === 'css') {
                             if (preg_match($httpPattern, $file)) {
                                 $src = $file;
@@ -257,7 +257,7 @@ if (! function_exists('pluginAssets')) {
                     }
                 }
 
-                if ($lgc = config($package.$name.'.legacy')) {
+                if ($lgc = config("{$package}{$name}.legacy")) {
                     $rs[$t] .= $lgc['condition'][0];
                     foreach ($lgc['src'] as $file) {
                         if (preg_match($httpPattern, $file)) {
