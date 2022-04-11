@@ -122,7 +122,7 @@ if (! function_exists('vendor')) {
             }
         }
 
-        if (is_dev() && preg_match('/(app)((\.min)?\.css)$/i', $path)) {
+        if (isDev() && preg_match('/(app)((\.min)?\.css)$/i', $path)) {
             $path = preg_replace('/(app)((\.min)?\.css)$/i', '$1-dev$2', $path);
         }
 
