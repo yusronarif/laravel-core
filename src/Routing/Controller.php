@@ -2,9 +2,13 @@
 
 namespace Yusronarif\Core\Routing;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\View\View;
+use JetBrains\PhpStorm\Pure;
 
 /**
  * Controller base class.
@@ -32,15 +36,24 @@ class Controller extends BaseController
     /**
      * Page title.
      */
-    private string $pageTitle;
+    protected string $pageTitle;
 
     /**
      * Page Meta.
      */
     private array $pageMeta = [
-        'description' => null,
-        'keywords' => null,
+        'description' => '',
+        'keywords' => 'yusronarif, koffinate, laravel',
+        'author' => 'Yusron Arif <yusron.arif4::at::gmail.com',
+        'generator' => 'Koffinate'
     ];
+
+    /**
+     * Breadcrumbs Collection
+     *
+     * @var Collection
+     */
+    private Collection $breadCrumbs;
 
     /**
      * Reserved variable for the controller.
@@ -70,6 +83,7 @@ class Controller extends BaseController
     {
         auth()->setDefaultDriver('web');
         $this->request = request();
+        $this->setBreadCrumb([]);
     }
 
     /**
@@ -89,15 +103,22 @@ class Controller extends BaseController
         return view($view, $this->controllerData);
     }
 
+    /**
+     * Share Blade View
+     *
+     * @return void
+     */
     private function share(): void
     {
         if (false === array_key_exists('pageTitle', $this->controllerData)) {
-            $this->setPageTitle('Untitled');
+            $this->setPageTitle($this->pageTitle ?? 'Untitled');
         }
 
         $this->setPageMeta('csrf_token', csrf_token());
 
         $this->controllerData['activeUser'] = auth()->user();
+        $this->controllerData['pageMeta'] = $this->pageMeta;
+        $this->controllerData['breadCrumbs'] = $this->breadCrumbs;
 
         $this->controllerData['crudType'] = $this->crudType;
         $this->controllerData['viewPath'] = ($this->viewPath ?: $this->prefixView).'.';
@@ -125,12 +146,12 @@ class Controller extends BaseController
      * @param  mixed  $value
      * @return void
      *
-     * @throws \Exception
+     * @throws Exception
      */
     protected function setData(string $name, mixed $value): void
     {
         if (in_array($name, $this->reservedVariables)) {
-            throw new \Exception("Variable [$name] is reserved by this controller");
+            throw new Exception("Variable [$name] is reserved by this controller");
         }
         $this->controllerData[$name] = $value;
     }
@@ -178,5 +199,64 @@ class Controller extends BaseController
     protected function addActiveMenu(string|array $menu): void
     {
         $this->activeMenu = array_merge($this->activeMenu, (array) $menu);
+    }
+
+    /**
+     * Set BreadCrumb.
+     *
+     * @param  string|array  $breadcrumb
+     * @return void
+     */
+    protected function setBreadCrumb(string|array $breadcrumb): void
+    {
+        $bc = collect();
+        if (is_string($breadcrumb)) {
+            $bc->add($this->breadCrumbFormat(['title' => $breadcrumb, 'url' => '#']));
+        } else {
+            foreach ((array) $breadcrumb as $k => $v) {
+                if (is_string($v)) {
+                    $bc->add($this->breadCrumbFormat($breadcrumb));
+                    break;
+                }
+                $bc->add($this->breadCrumbFormat($v));
+            }
+        }
+
+        $this->breadCrumbs = $bc;
+    }
+
+    /**
+     * Add BreadCrumb.
+     *
+     * @param  string|array  $breadcrumb
+     * @return void
+     */
+    protected function addBreadCrumb(string|array $breadcrumb): void
+    {
+        if (is_string($breadcrumb)) {
+            $this->breadCrumbs->add($this->breadCrumbFormat(['title' => $breadcrumb, 'url' => '#']));
+        } else {
+            foreach ((array) $breadcrumb as $k => $v) {
+                if (is_string($v)) {
+                    $this->breadCrumbs->add($this->breadCrumbFormat($breadcrumb));
+                    break;
+                }
+                $this->breadCrumbs->add($this->breadCrumbFormat($v));
+            }
+        }
+    }
+
+    /**
+     * Breadcrumb formatter
+     *
+     * @param array $breadcrumb
+     *
+     * @return object
+     */
+    #[Pure]
+    private function breadCrumbFormat(array $breadcrumb): object
+    {
+        $def = ['title' => '', 'url' => '#'];
+        return (object) array_merge($def, Arr::only($breadcrumb, ['title', 'url']));
     }
 }
