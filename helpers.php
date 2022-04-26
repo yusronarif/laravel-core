@@ -153,7 +153,7 @@ if (! function_exists('plugins')) {
      * @param  array|null  $type
      * @return void
      */
-    function plugins(string|array $name, string $base = 'vendor', ?array $type = null): void
+    function plugins(string|array $name, string $base = 'local', ?array $type = null): void
     {
         if (empty($name)) {
             return;
@@ -206,7 +206,7 @@ if (! function_exists('pluginAssets')) {
      * @param  string  $parent
      * @return array
      */
-    function pluginAssets(string $names, string $base = 'vendor', array $type = ['css', 'js'], string $parent = ''): array
+    function pluginAssets(string $names, string $base = 'local', array $type = ['css', 'js'], string $parent = ''): array
     {
         $names = (array) $names;
 
