@@ -45,11 +45,11 @@ class Controller extends BaseController
         'description' => '',
         'keywords' => 'yusronarif, koffinate, laravel',
         'author' => 'Yusron Arif <yusron.arif4::at::gmail.com',
-        'generator' => 'Koffinate'
+        'generator' => 'Koffinate',
     ];
 
     /**
-     * Breadcrumbs Collection
+     * Breadcrumbs Collection.
      *
      * @var Collection
      */
@@ -104,7 +104,7 @@ class Controller extends BaseController
     }
 
     /**
-     * Share Blade View
+     * Share Blade View.
      *
      * @return void
      */
@@ -247,16 +247,16 @@ class Controller extends BaseController
     }
 
     /**
-     * Breadcrumb formatter
+     * Breadcrumb formatter.
      *
-     * @param array $breadcrumb
-     *
+     * @param  array  $breadcrumb
      * @return object
      */
     #[Pure]
     private function breadCrumbFormat(array $breadcrumb): object
     {
         $def = ['title' => '', 'url' => '#'];
+
         return (object) array_merge($def, Arr::only($breadcrumb, ['title', 'url']));
     }
 }
