@@ -210,8 +210,8 @@ if (! function_exists('pluginAssets')) {
     {
         $names = (array) $names;
 
-        $localPath = preg_replace('/\/+$/', '', config('yusronarif.plugins.public_path', 'plugins')).'/';
-        $package = config('yusronarif.plugins.config_path', 'yusronarif.plugins').".{$parent}";
+        $localPath = preg_replace('/\/+$/', '', config('yusronarif.core.plugins.public_path', 'plugins')).'/';
+        $package = config('yusronarif.core.plugins.config_path', 'yusronarif.plugins').".{$parent}";
         $httpPattern = '/^(http[s?]:)/i';
 
         $rs = [];
